@@ -1,5 +1,5 @@
 ﻿<UserControl
-    x:Class="RayvarzInstaller.ModernUI.App.Pages.WebserverView"
+    x:Class="RayvarzInstaller.ModernUI.App.Pages.ProgressView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -13,21 +13,16 @@
             <TextBlock
                 Margin="0,0,0,8"
                 Style="{StaticResource Heading2}"
-                Text="PROGRESSBAR" />
+                Text="در حال نصب" />
             <ProgressBar
+                Width="500"
                 Height="16"
                 Margin="0,0,0,16"
                 IsIndeterminate="True"
                 Maximum="1"
                 Minimum="0" />
 
-            <ProgressBar
-                Height="16"
-                Margin="0,0,0,16"
-                IsIndeterminate="False"
-                Maximum="1"
-                Minimum="0"
-                Value=".7" />
+       
         </StackPanel>
     </Grid>
 </UserControl>

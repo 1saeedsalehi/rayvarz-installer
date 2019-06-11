@@ -15,29 +15,40 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <ScrollViewer Grid.Row="0">
-            <StackPanel MinWidth="200" HorizontalAlignment="Right">
+            <StackPanel  HorizontalAlignment="Right">
 
 
                 <TextBlock
+                    
                     Margin="0,0,0,8"
                     Style="{StaticResource Heading2}"
-                    Text="فرم نمونه"
+                    Text="پیکربندی پایگاه داده"
                     TextAlignment="Right" />
-                <mui:BBCodeBlock Margin="0,0,0,16" BBCode="توضیحات درباره این فرم را اینجا وارد میکنیم" />
+                <mui:BBCodeBlock HorizontalAlignment="Right" Margin="0,0,0,16" BBCode="در این مرحله از  پیکربندی پایگاه داده را مشخص کنید" />
 
                 <StackPanel x:Name="Form" Orientation="Vertical">
-
 
 
                     <StackPanel.Resources>
                         <Style TargetType="StackPanel">
                             <Setter Property="Orientation" Value="Horizontal" />
-                            <Setter Property="Margin" Value="7" />
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                            <Setter Property="Margin" Value="0,5" />
                         </Style>
                         <Style BasedOn="{StaticResource {x:Type Label}}" TargetType="Label">
-                            <Setter Property="Width" Value="100" />
+
                             <Setter Property="VerticalAlignment" Value="Center" />
-                            <Setter Property="HorizontalContentAlignment" Value="Center" />
+                            <Setter Property="HorizontalContentAlignment" Value="Right" />
+                            <Setter Property="Margin" Value="0,5"/>
+                        </Style>
+                        <Style  TargetType="TextBox">
+                            <Setter Property="Width" Value="300"/>
+                            <Setter Property="Height" Value="25"/>
+                        </Style>
+
+                        <Style  TargetType="PasswordBox">
+                            <Setter Property="Width" Value="300"/>
+                            <Setter Property="Height" Value="25"/>
                         </Style>
                         <Style BasedOn="{StaticResource {x:Type CheckBox}}" TargetType="CheckBox">
                             <Setter Property="Padding" Value="0,3" />
@@ -47,55 +58,38 @@
                         </Style>
                     </StackPanel.Resources>
 
-                    <StackPanel>
-
-                        <TextBox
-                            x:Name="TextFirstName"
-                            Width="150"
-                            Text="{Binding FirstName, Mode=TwoWay, ValidatesOnDataErrors=True}" />
-                        <Label Content="تست" Target="{Binding ElementName=TextFirstName}" />
-                    </StackPanel>
-                    <StackPanel>
-
-                        <TextBox
-                            x:Name="TextLastName"
-                            Width="150"
-                            Text="{Binding LastName, Mode=TwoWay, ValidatesOnDataErrors=True}" />
-                        <Label Content="تست 2" Target="{Binding ElementName=TextLastName}" />
-                    </StackPanel>
-                    <StackPanel>
-
-                        <RadioButton x:Name="RadioGendeMale">
-                            <TextBlock>گزینه یک</TextBlock>
-                        </RadioButton>
-                        <RadioButton Margin="8,0,0,0" Content="گزینه دو" />
-                        <Label Content="گزینه ها" Target="{Binding ElementName=RadioGendeMale}" />
-                    </StackPanel>
-
-
-
-                    <StackPanel>
-
-                        <ComboBox x:Name="items" Width="150">
-                            <ComboBoxItem>آیتم تستی</ComboBoxItem>
-                            <ComboBoxItem>آیتم دومی</ComboBoxItem>
+                    <StackPanel Orientation="Vertical" >
+                        <Label Content="نام کاتالوگ"  />
+                        <ComboBox x:Name="CatalogList" Width="300" Height="25">
+                            <ComboBoxItem>Fill_Database_From_Code_Behind</ComboBoxItem>
+                            <ComboBoxItem>Fill_Database_From_Code_Behind</ComboBoxItem>
+                            <ComboBoxItem>Fill_Database_From_Code_Behind</ComboBoxItem>
 
                         </ComboBox>
-                        <Label Content="لیست" Target="{Binding ElementName=ComboState}" />
+                    </StackPanel>
+                    
+                    <StackPanel Orientation="Vertical" Margin="5" >
+                        <Label Content="آدرس سرور پایگاه داده"  />
+                        <TextBox x:Name="DbServer"/>
                     </StackPanel>
 
-                    <StackPanel>
-
-                        <CheckBox>
-                            <TextBlock FontWeight="Bold">این حالت رو فعال کن!</TextBlock>
-                        </CheckBox>
-                        <Label />
+                    <StackPanel Orientation="Vertical" Margin="5" >
+                        <Label Content="نام کاربری"  />
+                        <TextBox x:Name="DbUSerName"/>
                     </StackPanel>
 
-                    <Button
-                        Margin="100,0,10,16"
-                        HorizontalAlignment="Center"
-                        Content="تست اتصال" />
+                    <StackPanel Orientation="Vertical" Margin="5" >
+                        <Label Content="گذرواژه"  />
+                        <PasswordBox x:Name="DbPassword" />
+                    </StackPanel>
+
+
+                    <StackPanel Orientation="Vertical" Margin="5" >
+                        <Label Content="نام پایگاه داده"  />
+                        <TextBox x:Name="DbName"/>
+                    </StackPanel>
+                    <Button Content="بررسی اتصال به پایگاه داده"/>
+
                 </StackPanel>
             </StackPanel>
         </ScrollViewer>
@@ -103,7 +97,7 @@
 
             <mui:ModernButton
                 Command="mui:LinkCommands.NavigateLink"
-                CommandParameter="/Pages/PathView.xaml"
+                CommandParameter="/Pages/ProgressView.xaml"
                 CommandTarget="{Binding ElementName=Frame}"
                 Content="مرحله بعدی"
                 IconData="F1 M 57,42L 57,34L 32.25,34L 42.25,24L 31.75,24L 17.75,38L 31.75,52L 42.25,52L 32.25,42L 57,42 Z" />
@@ -113,13 +107,7 @@
                 CommandTarget="{Binding ElementName=Frame}"
                 Content="مرحله قبلی"
                 IconData="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z" />
-            <mui:ModernButton
-                Background="#c0392b"
-                Command="mui:LinkCommands.NavigateLink"
-                CommandParameter="/Pages/PathView.xaml"
-                CommandTarget="{Binding ElementName=Frame}"
-                Content="انصراف"
-                IconData="F1 M 26.9166,22.1667L 37.9999,33.25L 49.0832,22.1668L 53.8332,26.9168L 42.7499,38L 53.8332,49.0834L 49.0833,53.8334L 37.9999,42.75L 26.9166,53.8334L 22.1666,49.0833L 33.25,38L 22.1667,26.9167L 26.9166,22.1667 Z" />
+
         </StackPanel>
     </Grid>
 </UserControl>

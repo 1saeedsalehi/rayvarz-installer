@@ -18,9 +18,9 @@ namespace RayvarzInstaller.ModernUI.App.Pages
     /// <summary>
     /// Interaction logic for LayoutBasic.xaml
     /// </summary>
-    public partial class WebserverView : UserControl
+    public partial class ProgressView : UserControl
     {
-        public WebserverView()
+        public ProgressView()
         {
             InitializeComponent();
         }

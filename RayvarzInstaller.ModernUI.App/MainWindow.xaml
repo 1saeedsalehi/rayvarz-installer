@@ -18,14 +18,9 @@
                 <mui:Link DisplayName="معرفی" Source="/Pages/Introduction.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
-        <mui:LinkGroup DisplayName="مسیر">
-            <mui:LinkGroup.Links>
-                <mui:Link DisplayName="تنظیمات مسیر فایل های نصبی" Source="/Pages/PathView.xaml" />
-            </mui:LinkGroup.Links>
-        </mui:LinkGroup>
         <mui:LinkGroup DisplayName="وب سرور">
             <mui:LinkGroup.Links>
-                <mui:Link DisplayName="IIS پیکر بندی " Source="/Pages/WebServerView.xaml" />
+                <mui:Link DisplayName="IIS پیکر بندی " Source="/Pages/PathView.xaml" />
             </mui:LinkGroup.Links>
         </mui:LinkGroup>
         <mui:LinkGroup DisplayName="پایگاه داده">
