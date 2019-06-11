@@ -16,6 +16,19 @@ namespace RayvarzInstaller.ModernUI.App
     /// </summary>
     public partial class App : Application
     {
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            if (!e.Args.Any())
+            {
+
+                var mainWindow = new MainWindow();
+                mainWindow.Show();
+            }
+            else
+            {
+                //CLI
+            }
+        }
         /// <summary>
         /// Raises the <see cref="E:System.Windows.Application.Startup"/> event.
         /// </summary>
