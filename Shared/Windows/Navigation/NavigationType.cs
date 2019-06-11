@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FirstFloor.ModernUI.Windows.Navigation
+namespace RayvarzInstaller.ModernUI.Windows.Navigation
 {
     /// <summary>
     /// Identifies the types of navigation that are supported.

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace FirstFloor.ModernUI.Windows.Controls
+namespace RayvarzInstaller.ModernUI.Windows.Controls
 {
     /// <summary>
     /// A DataGrid checkbox column using default Modern UI element styles.

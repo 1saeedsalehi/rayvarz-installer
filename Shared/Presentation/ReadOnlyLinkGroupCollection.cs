@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace FirstFloor.ModernUI.Presentation
+namespace RayvarzInstaller.ModernUI.Presentation
 {
     /// <summary>
     /// Represents a read-only observable collection of link groups.

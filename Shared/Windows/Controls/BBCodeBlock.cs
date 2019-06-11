@@ -1,6 +1,6 @@
-﻿using FirstFloor.ModernUI.Windows.Controls.BBCode;
-using FirstFloor.ModernUI.Windows.Media;
-using FirstFloor.ModernUI.Windows.Navigation;
+﻿using RayvarzInstaller.ModernUI.Windows.Controls.BBCode;
+using RayvarzInstaller.ModernUI.Windows.Media;
+using RayvarzInstaller.ModernUI.Windows.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,7 +15,7 @@ using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Navigation;
 
-namespace FirstFloor.ModernUI.Windows.Controls
+namespace RayvarzInstaller.ModernUI.Windows.Controls
 {
     /// <summary>
     /// A lighweight control for displaying small amounts of rich formatted BBCode content.

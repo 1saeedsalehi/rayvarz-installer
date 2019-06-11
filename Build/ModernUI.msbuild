@@ -5,7 +5,7 @@
     <BinariesDir>$(MSBuildProjectDirectory)\Binaries</BinariesDir>
     <OutputDir>$(MSBuildProjectDirectory)\Output</OutputDir>
     <TempDir>$(OutputDir)\Temp</TempDir>
-    <TemplatesDir>$(BaseDir)\FirstFloor.ModernUI.Templates</TemplatesDir>
+    <TemplatesDir>$(BaseDir)\RayvarzInstaller.ModernUI.Templates</TemplatesDir>
 
     <Configuration Condition="'$(Configuration)'==''" >Release</Configuration>
     <Platform>Any CPU</Platform>
@@ -14,7 +14,7 @@
     <NuGetApp>NuGet.exe</NuGetApp>
     
     <NuSpecFile>$(MSBuildProjectDirectory)\ModernUI.WPF.nuspec</NuSpecFile>
-    <SolutionFile>$(BaseDir)\FirstFloor.ModernUI.sln</SolutionFile>
+    <SolutionFile>$(BaseDir)\RayvarzInstaller.ModernUI.sln</SolutionFile>
     <VsixSolutionFile>$(TemplatesDir)\ModernUI.Templates.sln</VsixSolutionFile>
     <VsixManifestFile>$(TemplatesDir)\ModernUI.Templates\source.extension.vsixmanifest</VsixManifestFile>
     <VsixOutputFile>$(TemplatesDir)\ModernUI.Templates\bin\Release\ModernUI.Templates.vsix</VsixOutputFile>
@@ -40,25 +40,25 @@
     <XmlUpdate
       Namespace="http://schemas.microsoft.com/developer/msbuild/2003"
       Prefix="ms"
-      XmlFileName="$(BaseDir)\FirstFloor.ModernUI\FirstFloor.ModernUI.csproj"
+      XmlFileName="$(BaseDir)\RayvarzInstaller.ModernUI\RayvarzInstaller.ModernUI.csproj"
       XPath="/ms:Project/ms:PropertyGroup/ms:SignAssembly"
       Value="true" />
     <XmlUpdate
       Namespace="http://schemas.microsoft.com/developer/msbuild/2003"
       Prefix="ms"
-      XmlFileName="$(BaseDir)\FirstFloor.ModernUI\FirstFloor.ModernUI.csproj"
+      XmlFileName="$(BaseDir)\RayvarzInstaller.ModernUI\RayvarzInstaller.ModernUI.csproj"
       XPath="/ms:Project/ms:PropertyGroup/ms:AssemblyOriginatorKeyFile"
       Value="$(CertificateFilePath)" />
     <XmlUpdate
       Namespace="http://schemas.microsoft.com/developer/msbuild/2003"
       Prefix="ms"
-      XmlFileName="$(BaseDir)\FirstFloor.ModernUI.WPF4\FirstFloor.ModernUI.WPF4.csproj"
+      XmlFileName="$(BaseDir)\RayvarzInstaller.ModernUI.WPF4\RayvarzInstaller.ModernUI.WPF4.csproj"
       XPath="/ms:Project/ms:PropertyGroup/ms:SignAssembly"
       Value="true" />
     <XmlUpdate
       Namespace="http://schemas.microsoft.com/developer/msbuild/2003"
       Prefix="ms"
-      XmlFileName="$(BaseDir)\FirstFloor.ModernUI.WPF4\FirstFloor.ModernUI.WPF4.csproj"
+      XmlFileName="$(BaseDir)\RayvarzInstaller.ModernUI.WPF4\RayvarzInstaller.ModernUI.WPF4.csproj"
       XPath="/ms:Project/ms:PropertyGroup/ms:AssemblyOriginatorKeyFile"
       Value="$(CertificateFilePath)" />
   </Target>
@@ -67,25 +67,25 @@
     <XmlUpdate
           Namespace="http://schemas.microsoft.com/developer/msbuild/2003"
           Prefix="ms"
-          XmlFileName="$(BaseDir)\FirstFloor.ModernUI\FirstFloor.ModernUI.csproj"
+          XmlFileName="$(BaseDir)\RayvarzInstaller.ModernUI\RayvarzInstaller.ModernUI.csproj"
           XPath="/ms:Project/ms:PropertyGroup/ms:SignAssembly"
           Value="false" />
     <XmlUpdate
       Namespace="http://schemas.microsoft.com/developer/msbuild/2003"
       Prefix="ms"
-      XmlFileName="$(BaseDir)\FirstFloor.ModernUI\FirstFloor.ModernUI.csproj"
+      XmlFileName="$(BaseDir)\RayvarzInstaller.ModernUI\RayvarzInstaller.ModernUI.csproj"
       XPath="/ms:Project/ms:PropertyGroup/ms:AssemblyOriginatorKeyFile"
       Value="" />
     <XmlUpdate
       Namespace="http://schemas.microsoft.com/developer/msbuild/2003"
       Prefix="ms"
-      XmlFileName="$(BaseDir)\FirstFloor.ModernUI.WPF4\FirstFloor.ModernUI.WPF4.csproj"
+      XmlFileName="$(BaseDir)\RayvarzInstaller.ModernUI.WPF4\RayvarzInstaller.ModernUI.WPF4.csproj"
       XPath="/ms:Project/ms:PropertyGroup/ms:SignAssembly"
       Value="false" />
     <XmlUpdate
       Namespace="http://schemas.microsoft.com/developer/msbuild/2003"
       Prefix="ms"
-      XmlFileName="$(BaseDir)\FirstFloor.ModernUI.WPF4\FirstFloor.ModernUI.WPF4.csproj"
+      XmlFileName="$(BaseDir)\RayvarzInstaller.ModernUI.WPF4\RayvarzInstaller.ModernUI.WPF4.csproj"
       XPath="/ms:Project/ms:PropertyGroup/ms:AssemblyOriginatorKeyFile"
       Value="" />
   </Target>
@@ -96,12 +96,12 @@
   
   <Target Name="CopyOutput" DependsOnTargets="DisableSignAssembly">
     <!-- copy output to temp dir -->
-    <Copy SourceFiles="$(BaseDir)\FirstFloor.ModernUI\Bin\Release\FirstFloor.ModernUI.dll" DestinationFolder="$(TempDir)" />
-    <Copy SourceFiles="$(BaseDir)\FirstFloor.ModernUI\Bin\Release\FirstFloor.ModernUI.xml" DestinationFolder="$(TempDir)" />
-    <Copy SourceFiles="$(BaseDir)\FirstFloor.ModernUI.App\Bin\Release\ModernUIDemo.exe" DestinationFolder="$(TempDir)" />
-    <Copy SourceFiles="$(BaseDir)\FirstFloor.ModernUI.WPF4\Bin\Release\FirstFloor.ModernUI.dll" DestinationFolder="$(TempDir)\net40" />
-    <Copy SourceFiles="$(BaseDir)\FirstFloor.ModernUI.WPF4\Bin\Release\FirstFloor.ModernUI.xml" DestinationFolder="$(TempDir)\net40" />
-    <Copy SourceFiles="$(BaseDir)\FirstFloor.ModernUI.WPF4\Bin\Release\Microsoft.Windows.Shell.dll" DestinationFolder="$(TempDir)\net40" />
+    <Copy SourceFiles="$(BaseDir)\RayvarzInstaller.ModernUI\Bin\Release\RayvarzInstaller.ModernUI.dll" DestinationFolder="$(TempDir)" />
+    <Copy SourceFiles="$(BaseDir)\RayvarzInstaller.ModernUI\Bin\Release\RayvarzInstaller.ModernUI.xml" DestinationFolder="$(TempDir)" />
+    <Copy SourceFiles="$(BaseDir)\RayvarzInstaller.ModernUI.App\Bin\Release\ModernUIDemo.exe" DestinationFolder="$(TempDir)" />
+    <Copy SourceFiles="$(BaseDir)\RayvarzInstaller.ModernUI.WPF4\Bin\Release\RayvarzInstaller.ModernUI.dll" DestinationFolder="$(TempDir)\net40" />
+    <Copy SourceFiles="$(BaseDir)\RayvarzInstaller.ModernUI.WPF4\Bin\Release\RayvarzInstaller.ModernUI.xml" DestinationFolder="$(TempDir)\net40" />
+    <Copy SourceFiles="$(BaseDir)\RayvarzInstaller.ModernUI.WPF4\Bin\Release\Microsoft.Windows.Shell.dll" DestinationFolder="$(TempDir)\net40" />
     
     <!-- include license files -->
     <Copy SourceFiles="$(BaseDir)\License.Icons.txt" DestinationFolder="$(TempDir)\License" />
@@ -117,8 +117,8 @@
       <ReleaseFiles Include="$(TempDir)\**\*.*" />
     </ItemGroup>
 
-    <!-- retrieve assembly info from FirstFloor.ModernUI.dll -->
-  	<GetAssemblyIdentity AssemblyFiles="$(TempDir)\FirstFloor.ModernUI.dll">
+    <!-- retrieve assembly info from RayvarzInstaller.ModernUI.dll -->
+  	<GetAssemblyIdentity AssemblyFiles="$(TempDir)\RayvarzInstaller.ModernUI.dll">
       <Output TaskParameter="Assemblies" ItemName="AssemblyInfo" />
     </GetAssemblyIdentity>
    

@@ -1,4 +1,4 @@
-﻿using FirstFloor.ModernUI.Win32;
+﻿using RayvarzInstaller.ModernUI.Win32;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 
-namespace FirstFloor.ModernUI.Windows.Controls
+namespace RayvarzInstaller.ModernUI.Windows.Controls
 {
     /// <summary>
     /// A window instance that is capable of per-monitor DPI awareness when supported.

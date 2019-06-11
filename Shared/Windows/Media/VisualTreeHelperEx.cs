@@ -5,7 +5,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media;
 
-namespace FirstFloor.ModernUI.Windows.Media
+namespace RayvarzInstaller.ModernUI.Windows.Media
 {
     /// <summary>
     /// Provides addition visual tree helper methods.

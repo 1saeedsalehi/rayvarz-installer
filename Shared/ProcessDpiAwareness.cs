@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FirstFloor.ModernUI
+namespace RayvarzInstaller.ModernUI
 {
     /// <summary>
     /// Identifies dots per inch (dpi) awareness values.

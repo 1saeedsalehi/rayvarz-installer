@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FirstFloor.ModernUI.Windows.Controls;
+using RayvarzInstaller.ModernUI.Windows.Controls;
 
-namespace FirstFloor.ModernUI.Windows.Navigation
+namespace RayvarzInstaller.ModernUI.Windows.Navigation
 {
     /// <summary>
     /// Provides data for the <see cref="ModernFrame.NavigationFailed"/> event.

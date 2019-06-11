@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FirstFloor.ModernUI.Presentation
+namespace RayvarzInstaller.ModernUI.Presentation
 {
     /// <summary>
     /// The base implementation of the INotifyPropertyChanged contract.

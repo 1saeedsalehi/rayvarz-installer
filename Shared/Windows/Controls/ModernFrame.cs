@@ -1,5 +1,5 @@
-﻿using FirstFloor.ModernUI.Windows.Media;
-using FirstFloor.ModernUI.Windows.Navigation;
+﻿using RayvarzInstaller.ModernUI.Windows.Media;
+using RayvarzInstaller.ModernUI.Windows.Navigation;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace FirstFloor.ModernUI.Windows.Controls
+namespace RayvarzInstaller.ModernUI.Windows.Controls
 {
     /// <summary>
     /// A simple content frame implementation with navigation support.

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FirstFloor.ModernUI.Presentation
+namespace RayvarzInstaller.ModernUI.Presentation
 {
     /// <summary>
     /// Provides a base implementation for objects that are displayed in the UI.

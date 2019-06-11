@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FirstFloor.ModernUI.Win32
+namespace RayvarzInstaller.ModernUI.Win32
 {
     [StructLayout(LayoutKind.Sequential)]
     internal struct RECT

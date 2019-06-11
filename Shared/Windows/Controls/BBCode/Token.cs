@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 
-namespace FirstFloor.ModernUI.Windows.Controls.BBCode
+namespace RayvarzInstaller.ModernUI.Windows.Controls.BBCode
 {
     /// <summary>
     /// Represents a single token.

@@ -6,7 +6,7 @@ using System.Windows.Data;
 using System.Globalization;
 using System.Windows;
 
-namespace FirstFloor.ModernUI.Windows.Converters
+namespace RayvarzInstaller.ModernUI.Windows.Converters
 {
     /// <summary>
     /// Converts a null or empty string value to Visibility.Visible and any other value to Visibility.Collapsed

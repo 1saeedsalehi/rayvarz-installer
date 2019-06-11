@@ -2,7 +2,7 @@
 using System.Text;
 using System.Xml;
 
-namespace FirstFloor.ModernUI.Windows.Controls.BBCode
+namespace RayvarzInstaller.ModernUI.Windows.Controls.BBCode
 {
     /// <summary>
     /// Provides basic parse functionality.

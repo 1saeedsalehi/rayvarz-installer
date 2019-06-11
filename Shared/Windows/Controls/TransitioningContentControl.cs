@@ -12,9 +12,9 @@ using System.Windows.Media.Animation;
 using System.Windows.Controls;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
-using FirstFloor.ModernUI.Windows.Media;
+using RayvarzInstaller.ModernUI.Windows.Media;
 
-namespace FirstFloor.ModernUI.Windows.Controls
+namespace RayvarzInstaller.ModernUI.Windows.Controls
 {
     /// <summary>
     /// Represents a control with a single piece of content and when that content 

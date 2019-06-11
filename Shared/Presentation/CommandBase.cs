@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace FirstFloor.ModernUI.Presentation
+namespace RayvarzInstaller.ModernUI.Presentation
 {
     /// <summary>
     /// The base implementation of a command.

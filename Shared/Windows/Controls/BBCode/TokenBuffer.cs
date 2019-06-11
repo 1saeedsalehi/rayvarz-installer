@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FirstFloor.ModernUI.Windows.Controls.BBCode
+namespace RayvarzInstaller.ModernUI.Windows.Controls.BBCode
 {
     /// <summary>
     /// Represents a token buffer.

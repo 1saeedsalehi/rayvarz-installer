@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace FirstFloor.ModernUI.Windows
+namespace RayvarzInstaller.ModernUI.Windows
 {
     /// <summary>
     /// Loads XAML files using Application.LoadComponent.

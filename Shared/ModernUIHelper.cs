@@ -1,4 +1,4 @@
-﻿using FirstFloor.ModernUI.Win32;
+﻿using RayvarzInstaller.ModernUI.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace FirstFloor.ModernUI
+namespace RayvarzInstaller.ModernUI
 {
     /// <summary>
     /// Provides various common helper methods.

@@ -1,12 +1,12 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:sys="clr-namespace:System;assembly=mscorlib"
-                    xmlns:controls="clr-namespace:FirstFloor.ModernUI.Windows.Controls"
-                    xmlns:nav="clr-namespace:FirstFloor.ModernUI.Windows.Navigation">
+                    xmlns:controls="clr-namespace:RayvarzInstaller.ModernUI.Windows.Controls"
+                    xmlns:nav="clr-namespace:RayvarzInstaller.ModernUI.Windows.Navigation">
 
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/Converters.xaml" />
-        <ResourceDictionary Source="/FirstFloor.ModernUI;component/Assets/TextBlock.xaml" />
+        <ResourceDictionary Source="/RayvarzInstaller.ModernUI;component/Assets/Converters.xaml" />
+        <ResourceDictionary Source="/RayvarzInstaller.ModernUI;component/Assets/TextBlock.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="controls:ModernFrame">

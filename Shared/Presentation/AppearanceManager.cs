@@ -1,4 +1,4 @@
-﻿using FirstFloor.ModernUI.Windows.Navigation;
+﻿using RayvarzInstaller.ModernUI.Windows.Navigation;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -9,7 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace FirstFloor.ModernUI.Presentation
+namespace RayvarzInstaller.ModernUI.Presentation
 {
     /// <summary>
     /// Manages the theme, font size and accent colors for a Modern UI application.
@@ -20,11 +20,11 @@ namespace FirstFloor.ModernUI.Presentation
         /// <summary>
         /// The location of the dark theme resource dictionary.
         /// </summary>
-        public static readonly Uri DarkThemeSource = new Uri("/FirstFloor.ModernUI;component/Assets/ModernUI.Dark.xaml", UriKind.Relative);
+        public static readonly Uri DarkThemeSource = new Uri("/RayvarzInstaller.ModernUI;component/Assets/ModernUI.Dark.xaml", UriKind.Relative);
         /// <summary>
         /// The location of the light theme resource dictionary.
         /// </summary>
-        public static readonly Uri LightThemeSource = new Uri("/FirstFloor.ModernUI;component/Assets/ModernUI.Light.xaml", UriKind.Relative);
+        public static readonly Uri LightThemeSource = new Uri("/RayvarzInstaller.ModernUI;component/Assets/ModernUI.Light.xaml", UriKind.Relative);
 
         /// <summary>
         /// The resource key for the accent color.

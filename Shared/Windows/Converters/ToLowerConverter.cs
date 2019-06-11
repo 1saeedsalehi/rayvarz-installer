@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Windows.Data;
 
-namespace FirstFloor.ModernUI.Windows.Converters
+namespace RayvarzInstaller.ModernUI.Windows.Converters
 {
     /// <summary>
     /// Converts string values to lower case.

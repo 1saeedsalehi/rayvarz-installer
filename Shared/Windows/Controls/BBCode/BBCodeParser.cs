@@ -7,9 +7,9 @@ using System.Windows.Documents;
 using System.Windows.Media;
 using System.Windows;
 using System.Windows.Input;
-using FirstFloor.ModernUI.Windows.Navigation;
+using RayvarzInstaller.ModernUI.Windows.Navigation;
 
-namespace FirstFloor.ModernUI.Windows.Controls.BBCode
+namespace RayvarzInstaller.ModernUI.Windows.Controls.BBCode
 {
     /// <summary>
     /// Represents the BBCode parser.

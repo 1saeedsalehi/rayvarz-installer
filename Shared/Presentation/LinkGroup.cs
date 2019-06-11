@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FirstFloor.ModernUI.Presentation
+namespace RayvarzInstaller.ModernUI.Presentation
 {
     /// <summary>
     /// Represents a named group of links.
@@ -21,7 +21,7 @@ namespace FirstFloor.ModernUI.Presentation
         /// </summary>
         /// <value>The key of the group.</value>
         /// <remarks>
-        /// The group key is used to group link groups in a <see cref="FirstFloor.ModernUI.Windows.Controls.ModernMenu"/>.
+        /// The group key is used to group link groups in a <see cref="RayvarzInstaller.ModernUI.Windows.Controls.ModernMenu"/>.
         /// </remarks>
         public string GroupKey
         {

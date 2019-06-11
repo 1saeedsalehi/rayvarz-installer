@@ -44,12 +44,12 @@ using System;
 [assembly: AssemblyVersion("1.0.9.0")]
 [assembly: AssemblyFileVersion("1.0.9.0")]
 
-[assembly: XmlnsDefinition("http://firstfloorsoftware.com/ModernUI", "FirstFloor.ModernUI.Presentation")]
-[assembly: XmlnsDefinition("http://firstfloorsoftware.com/ModernUI", "FirstFloor.ModernUI.Windows")]
-[assembly: XmlnsDefinition("http://firstfloorsoftware.com/ModernUI", "FirstFloor.ModernUI.Windows.Controls")]
-[assembly: XmlnsDefinition("http://firstfloorsoftware.com/ModernUI", "FirstFloor.ModernUI.Windows.Converters")]
-[assembly: XmlnsDefinition("http://firstfloorsoftware.com/ModernUI", "FirstFloor.ModernUI.Windows.Navigation")]
-[assembly: XmlnsPrefix("http://firstfloorsoftware.com/ModernUI", "mui")]
+[assembly: XmlnsDefinition("http://RayvarzInstallersoftware.com/ModernUI", "RayvarzInstaller.ModernUI.Presentation")]
+[assembly: XmlnsDefinition("http://RayvarzInstallersoftware.com/ModernUI", "RayvarzInstaller.ModernUI.Windows")]
+[assembly: XmlnsDefinition("http://RayvarzInstallersoftware.com/ModernUI", "RayvarzInstaller.ModernUI.Windows.Controls")]
+[assembly: XmlnsDefinition("http://RayvarzInstallersoftware.com/ModernUI", "RayvarzInstaller.ModernUI.Windows.Converters")]
+[assembly: XmlnsDefinition("http://RayvarzInstallersoftware.com/ModernUI", "RayvarzInstaller.ModernUI.Windows.Navigation")]
+[assembly: XmlnsPrefix("http://RayvarzInstallersoftware.com/ModernUI", "mui")]
 
 [assembly: ThemeInfo(
     ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located
