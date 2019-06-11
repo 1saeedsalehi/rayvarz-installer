@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RayvarzInstaller.ModernUI.Windows;
+using RayvarzInstaller.ModernUI.Windows.Navigation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,11 +20,34 @@ namespace RayvarzInstaller.ModernUI.App.Pages
     /// <summary>
     /// Interaction logic for LayoutBasic.xaml
     /// </summary>
-    public partial class ProgressView : UserControl
+    public partial class ProgressView : UserControl , IContent
     {
         public ProgressView()
         {
             InitializeComponent();
         }
+
+        public void OnFragmentNavigation(Windows.Navigation.FragmentNavigationEventArgs e)
+        {
+            
+        }
+
+        public void OnNavigatedFrom(Windows.Navigation.NavigationEventArgs e)
+        {
+            
+        }
+
+        public void OnNavigatedTo(Windows.Navigation.NavigationEventArgs e)
+        {
+            //e.Content
+            //Do Stuff here!
+            
+        }
+
+        public void OnNavigatingFrom(Windows.Navigation.NavigatingCancelEventArgs e)
+        {
+            
+        }
+        
     }
 }

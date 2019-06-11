@@ -93,9 +93,8 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal">
 
             <mui:ModernButton
-                Command="mui:LinkCommands.NavigateLink"
-                CommandParameter="/Pages/DatabaseView.xaml"
-                CommandTarget="{Binding ElementName=Frame}"
+                Click="ModernButton_Click_1"
+                
                 Content="مرحله بعدی"
                 IconData="F1 M 57,42L 57,34L 32.25,34L 42.25,24L 31.75,24L 17.75,38L 31.75,52L 42.25,52L 32.25,42L 57,42 Z" />
             <mui:ModernButton

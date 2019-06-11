@@ -4,25 +4,34 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    d:DesignHeight="300"
+    d:DesignHeight="500"
     d:DesignWidth="300"
     mc:Ignorable="d">
     <Grid>
-        <StackPanel Width="240" HorizontalAlignment="Left">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" ></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0"  HorizontalAlignment="Center" VerticalAlignment="Center">
 
             <TextBlock
                 Margin="0,0,0,8"
+                TextAlignment="Right"
                 Style="{StaticResource Heading2}"
                 Text="در حال نصب" />
             <ProgressBar
-                Width="500"
+                Width="600"
+                FlowDirection="RightToLeft"
                 Height="16"
                 Margin="0,0,0,16"
-                IsIndeterminate="True"
+                IsIndeterminate="False"
                 Maximum="1"
+                Value="0.72"
                 Minimum="0" />
+            
 
-       
         </StackPanel>
+
+        <Button x:Name="FinishButton" Visibility="Hidden" Content="خاتمه" HorizontalAlignment="Left" Width="150" Grid.Row="1"   />
     </Grid>
 </UserControl>
