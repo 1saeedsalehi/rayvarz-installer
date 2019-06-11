@@ -112,6 +112,12 @@
       <DependentUpon>DpiAwareness.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\DpiAwarenessViewModel.cs" />
+    <Compile Include="Pages\DatabaseView.xaml.cs">
+      <DependentUpon>DatabaseView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\WebServerView.xaml.cs">
+      <DependentUpon>WebServerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SampleFormViewModel.cs" />
     <Compile Include="FlickrImageLoader.cs" />
     <Compile Include="LoremIpsumLoader.cs" />
@@ -128,9 +134,6 @@
     </Compile>
     <Compile Include="Pages\ContentLoader.xaml.cs">
       <DependentUpon>ContentLoader.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Pages\Navigation.xaml.cs">
-      <DependentUpon>Navigation.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ControlsModern.xaml.cs">
       <DependentUpon>ControlsModern.xaml</DependentUpon>
@@ -159,8 +162,8 @@
     <Compile Include="Content\ControlsStylesText.xaml.cs">
       <DependentUpon>ControlsStylesText.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\LayoutBasic.xaml.cs">
-      <DependentUpon>LayoutBasic.xaml</DependentUpon>
+    <Compile Include="Pages\PathView.xaml.cs">
+      <DependentUpon>PathView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\LayoutList.xaml.cs">
       <DependentUpon>LayoutList.xaml</DependentUpon>
@@ -367,10 +370,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\Navigation.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Pages\ControlsModern.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -407,7 +406,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Pages\LayoutBasic.xaml">
+    <Page Include="Pages\DatabaseView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\WebServerView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\PathView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

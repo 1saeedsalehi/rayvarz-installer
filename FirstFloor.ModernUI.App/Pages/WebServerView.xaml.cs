@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace FirstFloor.ModernUI.App.Pages
 {
     /// <summary>
-    /// Interaction logic for Navigation.xaml
+    /// Interaction logic for LayoutBasic.xaml
     /// </summary>
-    public partial class Navigation : UserControl
+    public partial class WebserverView : UserControl
     {
-        public Navigation()
+        public WebserverView()
         {
             InitializeComponent();
         }

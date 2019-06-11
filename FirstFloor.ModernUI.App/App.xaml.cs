@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 
 namespace FirstFloor.ModernUI.App
 {
@@ -21,6 +22,8 @@ namespace FirstFloor.ModernUI.App
         /// <param name="e">A <see cref="T:System.Windows.StartupEventArgs"/> that contains the event data.</param>
         protected override void OnStartup(StartupEventArgs e)
         {
+            AppearanceManager.Current.AccentColor = Color.FromRgb(47, 61, 136);
+            AppearanceManager.Current.ThemeSource = AppearanceManager.DarkThemeSource;
             base.OnStartup(e);
         }
     }
