@@ -1,4 +1,5 @@
-﻿using RayvarzInstaller.ModernUI.Windows;
+﻿using RayvarzInstaller.ModernUI.App.Models;
+using RayvarzInstaller.ModernUI.Windows;
 using RayvarzInstaller.ModernUI.Windows.Navigation;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -36,7 +37,15 @@ private void ChooseIdpManagementInstallationPathDirectory(object sender, System.
 
         private void ModernButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+            var idpSetting = new IDPSetup {
+                IDPFolderName = IdpPathOnIIS.Text,
+                IDPPath = IdpInstallationPath.Text,
+                AdminFolderName = IISAdminManagementName.Text,
+                AdminPath = IdpManagementInstallationPath.Text,
+                IDPAddress = IdpServerPath.Text,
+            };
 
+           
         }
 
         private void ModernButton_Click_1(object sender, System.Windows.RoutedEventArgs e)

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RayvarzInstaller.ModernUI.App</RootNamespace>
     <AssemblyName>Rayvarz Installer</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -17,6 +17,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -41,11 +42,28 @@
     <StartupObject>RayvarzInstaller.ModernUI.App.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ChinhDo.Transactions.FileManager, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ChinhDo.Transactions.FileManager.1.2.0\lib\net45\ChinhDo.Transactions.FileManager.dll</HintPath>
+    </Reference>
+    <Reference Include="Connections">
+      <HintPath>..\..\..\Rayvarz Setup\Automasion Project\SetupEoa\bin\Debug\Connections.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.IWshRuntimeLibrary">
+      <HintPath>..\..\..\Rayvarz.Setup.Core\lib\Interop.IWshRuntimeLibrary.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="Microsoft.Windows.Shell">
       <HintPath>..\Binaries\Microsoft.Windows.Shell.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.DirectoryServices" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -69,12 +87,35 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\IDPSetup.cs" />
+    <Compile Include="Models\IisApplicationPool.cs" />
+    <Compile Include="Models\IisEntry.cs" />
+    <Compile Include="Models\InstallPathInfo.cs" />
+    <Compile Include="Models\Manifest.cs" />
+    <Compile Include="Models\OnStateChangedDelegate.cs" />
+    <Compile Include="Models\RayvarzSystem.cs" />
+    <Compile Include="Models\StateInfo.cs" />
+    <Compile Include="Models\VirtualDirectory.cs" />
+    <Compile Include="Models\WebSiteEntry.cs" />
     <Compile Include="Pages\DatabaseView.xaml.cs">
       <DependentUpon>DatabaseView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\ProgressView.xaml.cs">
       <DependentUpon>ProgressView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Services\Helper.cs" />
+    <Compile Include="Services\IHelper.cs" />
+    <Compile Include="Services\IManifestParser.cs" />
+    <Compile Include="Services\ISetupRegistry.cs" />
+    <Compile Include="Services\ISystemFileHelper.cs" />
+    <Compile Include="Services\IWebDeployHelper.cs" />
+    <Compile Include="Models\OnSubStateChangedDelegtae.cs" />
+    <Compile Include="Services\ManifestParser.cs" />
+    <Compile Include="Services\SetupRegistry.cs" />
+    <Compile Include="Services\SetupServices.cs" />
+    <Compile Include="Services\SimpleJSON.cs" />
+    <Compile Include="Services\SystemFileHelper.cs" />
+    <Compile Include="Services\WebDeployHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainWindow.xaml.cs">
@@ -103,6 +144,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

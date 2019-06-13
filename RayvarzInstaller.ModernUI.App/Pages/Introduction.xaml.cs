@@ -1,4 +1,6 @@
-﻿using RayvarzInstaller.ModernUI.Windows.Controls;
+﻿using RayvarzInstaller.ModernUI.App.Models;
+using RayvarzInstaller.ModernUI.App.Services;
+using RayvarzInstaller.ModernUI.Windows.Controls;
 using RayvarzInstaller.ModernUI.Windows.Navigation;
 using System;
 using System.Collections.Generic;
@@ -31,20 +33,24 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         public Introduction()
         {
             InitializeComponent();
-            ObservableCollection<Customer> custdata = GetData();
+            ObservableCollection<InstallPathInfo> custdata = GetData();
 
             //Bind the DataGrid to the customer data
             DG1.DataContext = custdata;
         }
 
-        private ObservableCollection<Customer> GetData()
-        {
-            var customers = new ObservableCollection<Customer>();
-            customers.Add(new Customer { Title = "IDP", Version = "1.0.0" });
-            customers.Add(new Customer { Title = "Test", Version = "2.0.0" });
-            customers.Add(new Customer { Title = "IDP-Beta", Version = "3.0.0" });
+        
 
-            return customers;
+        private ObservableCollection<InstallPathInfo> GetData()
+        {
+            var setupRegistry = new SetupRegistry();
+            var paths = setupRegistry.InstallPaths;
+            var pathInfoCollection = new ObservableCollection<InstallPathInfo>();
+            paths.ForEach(path =>
+            {
+                pathInfoCollection.Add(path);
+            });
+            return pathInfoCollection;
         }
 
         private void GridRemove_Clicked(object sender, RoutedEventArgs e)

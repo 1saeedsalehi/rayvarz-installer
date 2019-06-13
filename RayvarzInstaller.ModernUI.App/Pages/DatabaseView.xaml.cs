@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RayvarzInstaller.ModernUI.App.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,14 @@ namespace RayvarzInstaller.ModernUI.App.Pages
     {
         public DatabaseView()
         {
+            var idpSetup = new IDPSetup
+            {
+                CatalogName = CatalogList.SelectedValue.ToString(),
+                DatabaseName = DbName.Text,
+                Username = DbUSerName.Text,
+                Password = DbPassword.Password,
+                Servername = DbServer.Text
+            };
             InitializeComponent();
         }
     }

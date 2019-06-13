@@ -19,8 +19,8 @@
             <DataGrid Name="DG1" ItemsSource="{Binding}" AutoGenerateColumns="False" >
                 <DataGrid.Columns>
                     
-                    <mui:DataGridTextColumn Header="عنوان"  Binding="{Binding Title}"/>
-                    <mui:DataGridTextColumn Header="نسخه"   Binding="{Binding Version}" />
+                    <mui:DataGridTextColumn Header="شماره"  Binding="{Binding Id}"/>
+                    <mui:DataGridTextColumn Header="نسخه"   Binding="{Binding PackageId}" />
                     
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
