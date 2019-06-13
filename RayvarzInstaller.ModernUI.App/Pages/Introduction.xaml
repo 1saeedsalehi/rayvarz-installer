@@ -1,35 +1,44 @@
 ﻿<UserControl
     x:Class="RayvarzInstaller.ModernUI.App.Pages.Introduction"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:core="clr-namespace:System;assembly=mscorlib"
-             xmlns:local="clr-namespace:RayvarzInstaller.ModernUI.App.Pages"
-             xmlns:mui="http://RayvarzInstallersoftware.com/ModernUI"
-             
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:core="clr-namespace:System;assembly=mscorlib"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:RayvarzInstaller.ModernUI.App.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:mui="http://RayvarzInstallersoftware.com/ModernUI"
     d:DesignHeight="300"
     d:DesignWidth="300"
     mc:Ignorable="d">
     <Grid>
-        
-       
-        <DockPanel>
-            <TextBlock DockPanel.Dock="Top" Text="نسخه های نصب شده" Style="{StaticResource Heading2}" Margin="0,0,0,8" />
-            <DataGrid Name="DG1" ItemsSource="{Binding}" AutoGenerateColumns="False" >
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0">
+            <TextBlock
+                Margin="0,0,0,8"
+                DockPanel.Dock="Top"
+                Style="{StaticResource Heading2}"
+                Text="نسخه های نصب شده" />
+            <DataGrid
+                Name="DG1"
+                AutoGenerateColumns="False"
+                ItemsSource="{Binding}">
                 <DataGrid.Columns>
-                    
-                    <mui:DataGridTextColumn Header="شماره"  Binding="{Binding Id}"/>
-                    <mui:DataGridTextColumn Header="نسخه"   Binding="{Binding PackageId}" />
-                    
+
+                    <mui:DataGridTextColumn Binding="{Binding Id}" Header="شماره" />
+                    <mui:DataGridTextColumn Binding="{Binding PackageId}" Header="نسخه" />
+
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button >آپدیت</Button>
+                                <Button>آپدیت</Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                
+
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
@@ -39,6 +48,19 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-        </DockPanel>
+
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+
+            <mui:ModernButton
+                Click="GotoNextPage"
+                Content="مرحله بعدی"
+                IconData="F1 M 57,42L 57,34L 32.25,34L 42.25,24L 31.75,24L 17.75,38L 31.75,52L 42.25,52L 32.25,42L 57,42 Z" />
+            <mui:ModernButton
+                Click="GoToPrevPage"
+                Content="مرحله قبلی"
+                IconData="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z" />
+
+        </StackPanel>
     </Grid>
 </UserControl>

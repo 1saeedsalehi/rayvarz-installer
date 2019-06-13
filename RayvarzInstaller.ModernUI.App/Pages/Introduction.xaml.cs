@@ -1,22 +1,12 @@
-﻿using RayvarzInstaller.ModernUI.App.Models;
-using RayvarzInstaller.ModernUI.App.Services;
-using RayvarzInstaller.ModernUI.Windows.Controls;
-using RayvarzInstaller.ModernUI.Windows.Navigation;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using RayvarzInstaller.ModernUI.App.Models;
+using RayvarzInstaller.ModernUI.App.Services;
+using RayvarzInstaller.ModernUI.Windows;
+using RayvarzInstaller.ModernUI.Windows.Controls;
+using RayvarzInstaller.ModernUI.Windows.Navigation;
 
 namespace RayvarzInstaller.ModernUI.App.Pages
 {
@@ -28,18 +18,18 @@ namespace RayvarzInstaller.ModernUI.App.Pages
     /// <summary>
     /// Interaction logic for Introduction.xaml
     /// </summary>
-    public partial class Introduction : UserControl
+    public partial class Introduction : UserControl , IContent
     {
+        
         public Introduction()
         {
+            
             InitializeComponent();
             ObservableCollection<InstallPathInfo> custdata = GetData();
 
             //Bind the DataGrid to the customer data
             DG1.DataContext = custdata;
         }
-
-        
 
         private ObservableCollection<InstallPathInfo> GetData()
         {
@@ -60,9 +50,44 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             var dialogResult = ModernDialog.ShowMessage("Are you sure?", "Confirmation", MessageBoxButton.YesNo);
             if (dialogResult == MessageBoxResult.Yes)
             {
-                //do stuff
+                //Serialize parametres using json!
+                NavigationCommands.GoToPage.Execute("/Pages/PathView.xaml#Name=saeed&Family=Salehi", null);
             }
+        }
 
+        public void OnFragmentNavigation(FragmentNavigationEventArgs e)
+        {
+            //occures after navigateTo method
+            //read passed data from e.Fragment
+        }
+
+        public void OnNavigatedFrom(NavigationEventArgs e)
+        {
+        }
+
+        public void OnNavigatedTo(NavigationEventArgs e)
+        {
+            //occures when navigated to this page!
+            //e.NavigationType can be New,Back,Refresh
+
+        }
+
+        public void OnNavigatingFrom(NavigatingCancelEventArgs e)
+        {
+            //occures before navigating from this page to another 
+            //write validation logic here
+            //set e.Cancel = true; if you want to prevent navigating
+        }
+
+        private void GotoNextPage(object sender, System.Windows.RoutedEventArgs e)
+        {
+            //Serialize parametres using json!
+            NavigationCommands.GoToPage.Execute("/Pages/PathView.xaml", null);
+        }
+
+        private void GoToPrevPage(object sender, System.Windows.RoutedEventArgs e)
+        {
+            NavigationCommands.GoToPage.Execute("/Pages/Introduction.xaml", null);
         }
     }
 }

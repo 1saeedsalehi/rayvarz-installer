@@ -1,22 +1,20 @@
-﻿using RayvarzInstaller.ModernUI.App.Models;
+﻿using System.Windows.Forms;
+using System.Windows.Input;
+using RayvarzInstaller.ModernUI.App.Models;
 using RayvarzInstaller.ModernUI.Windows;
 using RayvarzInstaller.ModernUI.Windows.Navigation;
-using System.Windows.Controls;
-using System.Windows.Forms;
 
 namespace RayvarzInstaller.ModernUI.App.Pages
 {
-    /// <summary>
-    /// Interaction logic for LayoutBasic.xaml
-    /// </summary>
-    public partial class PathView : System.Windows.Controls.UserControl , IContent
+   
+    public partial class PathView : System.Windows.Controls.UserControl, IContent
     {
         public PathView()
-        {   
+        {
             InitializeComponent();
         }
-        
-private void ChooseIdpManagementInstallationPathDirectory(object sender, System.Windows.RoutedEventArgs e)
+
+        private void ChooseIdpManagementInstallationPathDirectory(object sender, System.Windows.RoutedEventArgs e)
         {
             var fbd = new FolderBrowserDialog();
             fbd.Description = "IDP مسیر نصب سامانه";
@@ -37,7 +35,8 @@ private void ChooseIdpManagementInstallationPathDirectory(object sender, System.
 
         private void ModernButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            var idpSetting = new IDPSetup {
+            var idpSetting = new IDPSetup
+            {
                 IDPFolderName = IdpPathOnIIS.Text,
                 IDPPath = IdpInstallationPath.Text,
                 AdminFolderName = IISAdminManagementName.Text,
@@ -45,16 +44,13 @@ private void ChooseIdpManagementInstallationPathDirectory(object sender, System.
                 IDPAddress = IdpServerPath.Text,
             };
 
-           
-        }
 
-        private void ModernButton_Click_1(object sender, System.Windows.RoutedEventArgs e)
-        {
-            //TODO: go to next page and pass data
         }
-
         public void OnFragmentNavigation(FragmentNavigationEventArgs e)
         {
+            //occures after navigateTo method
+            //read passed data from e.Fragment
+            //deserialize data!
         }
 
         public void OnNavigatedFrom(NavigationEventArgs e)
@@ -63,10 +59,27 @@ private void ChooseIdpManagementInstallationPathDirectory(object sender, System.
 
         public void OnNavigatedTo(NavigationEventArgs e)
         {
+            //occures when navigated to this page!
+            //e.NavigationType can be New,Back,Refresh
+            
         }
 
         public void OnNavigatingFrom(NavigatingCancelEventArgs e)
         {
+            //occures before navigating from this page to another 
+            //write validation logic here
+            //set e.Cancel = true; if you want to prevent navigating
+        }
+
+        private void GotoNextPage(object sender, System.Windows.RoutedEventArgs e)
+        {
+            //Serialize parametres using json!
+            NavigationCommands.GoToPage.Execute("/Pages/DatabaseView.xaml#Name=saeed&Family=Salehi",null); 
+        }
+
+        private void GoToPrevPage(object sender, System.Windows.RoutedEventArgs e)
+        {
+            NavigationCommands.GoToPage.Execute("/Pages/Introduction.xaml", null);
         }
     }
 }
