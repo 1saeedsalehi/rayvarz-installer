@@ -1,5 +1,9 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.IO;
+using System.Windows.Forms;
 using System.Windows.Input;
+using Microsoft.Web.Administration;
+using Newtonsoft.Json;
 using RayvarzInstaller.ModernUI.App.Models;
 using RayvarzInstaller.ModernUI.Windows;
 using RayvarzInstaller.ModernUI.Windows.Navigation;
@@ -12,6 +16,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         public PathView()
         {
             InitializeComponent();
+            FillFileAddress();
         }
 
         private void ChooseIdpManagementInstallationPathDirectory(object sender, System.Windows.RoutedEventArgs e)
@@ -35,14 +40,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
 
         private void ModernButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            var idpSetting = new IDPSetup
-            {
-                IDPFolderName = IdpPathOnIIS.Text,
-                IDPPath = IdpInstallationPath.Text,
-                AdminFolderName = IISAdminManagementName.Text,
-                AdminPath = IdpManagementInstallationPath.Text,
-                IDPAddress = IdpServerPath.Text,
-            };
+            
 
 
         }
@@ -73,13 +71,41 @@ namespace RayvarzInstaller.ModernUI.App.Pages
 
         private void GotoNextPage(object sender, System.Windows.RoutedEventArgs e)
         {
+            var idpSetting = new IDPSetup
+            {
+                IDPFolderName = IdpPathOnIIS.Text,
+                IDPPath = IdpInstallationPath.Text,
+                AdminFolderName = IISAdminManagementName.Text,
+                AdminPath = IdpManagementInstallationPath.Text,
+                IDPAddress = IdpServerPath.Text,
+            };
+            var transferData = JsonConvert.SerializeObject(idpSetting);
             //Serialize parametres using json!
-            NavigationCommands.GoToPage.Execute("/Pages/DatabaseView.xaml#Name=saeed&Family=Salehi",null); 
+            NavigationCommands.GoToPage.Execute("/Pages/DatabaseView.xaml#"+transferData,null); 
         }
 
         private void GoToPrevPage(object sender, System.Windows.RoutedEventArgs e)
         {
             NavigationCommands.GoToPage.Execute("/Pages/Introduction.xaml", null);
+        }
+
+        private void FillFileAddress()
+        {
+            string fileAddress = "";
+            try
+            {
+                ServerManager sm = new ServerManager();
+                Site site = sm.Sites[0];
+
+                fileAddress = site.LogFile.Directory.Replace("%SystemDrive%\\", Path.GetPathRoot(Environment.SystemDirectory)).Replace("logs\\LogFiles", "wwwroot\\");
+            }
+            catch
+            {
+
+            }
+            IdpInstallationPath.Text = !(string.IsNullOrEmpty(fileAddress)) ? fileAddress : "C:\\inetpub\\wwwroot\\";
+            IdpManagementInstallationPath.Text = !(string.IsNullOrEmpty(fileAddress)) ? fileAddress : "C:\\inetpub\\wwwroot\\";
+            IdpServerPath.Text = "http://localhost";
         }
     }
 }

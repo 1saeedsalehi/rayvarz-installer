@@ -20,13 +20,14 @@
                 Style="{StaticResource Heading2}"
                 Text="در حال نصب" />
             <ProgressBar
+                 x:Name="idpProgressbar"
                 Width="600"
                 FlowDirection="RightToLeft"
                 Height="16"
                 Margin="0,0,0,16"
                 IsIndeterminate="False"
                 Maximum="1"
-                Value="0.72"
+                Value="0"
                 Minimum="0" />
             
 

@@ -66,10 +66,10 @@
                             x:Name="CatalogList"
                             Width="300"
                             Height="25">
-                            <ComboBoxItem>Fill_Database_From_Code_Behind</ComboBoxItem>
-                            <ComboBoxItem>Fill_Database_From_Code_Behind</ComboBoxItem>
-                            <ComboBoxItem>Fill_Database_From_Code_Behind</ComboBoxItem>
-
+                            <ComboBoxItem>EOFFICE</ComboBoxItem>
+                            <ComboBoxItem>BPMS</ComboBoxItem>
+                            <ComboBoxItem>ARPG</ComboBoxItem>
+                            <ComboBoxItem>RSM</ComboBoxItem>
                         </ComboBox>
                     </StackPanel>
 

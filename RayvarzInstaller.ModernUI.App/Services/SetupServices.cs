@@ -260,7 +260,7 @@ namespace RayvarzInstaller.ModernUI.App.Services
         {
             var setupPath = new InstallPathInfo
             {
-                PackageId = _manifest.PackageId,
+                PackageId = "beta_10",
                 PhysicalPath = realFileAddress,
                 IsWeb = true,
             };

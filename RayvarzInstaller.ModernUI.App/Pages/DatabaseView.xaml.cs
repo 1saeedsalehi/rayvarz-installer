@@ -1,4 +1,5 @@
-﻿using RayvarzInstaller.ModernUI.App.Models;
+﻿using Newtonsoft.Json;
+using RayvarzInstaller.ModernUI.App.Models;
 using RayvarzInstaller.ModernUI.Windows;
 using RayvarzInstaller.ModernUI.Windows.Navigation;
 using System;
@@ -21,16 +22,10 @@ namespace RayvarzInstaller.ModernUI.App.Pages
     
     public partial class DatabaseView : UserControl,IContent
     {
+        private IDPSetup IDPSetup;
         public DatabaseView()
         {
-            //var idpSetup = new IDPSetup
-            //{
-            //    CatalogName = CatalogList.SelectedValue.ToString(),
-            //    DatabaseName = DbName.Text,
-            //    Username = DbUSerName.Text,
-            //    Password = DbPassword.Password,
-            //    Servername = DbServer.Text
-            //};
+            
             InitializeComponent();
         }
 
@@ -39,6 +34,8 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             //occures after navigateTo method
             //read passed data from e.Fragment
             //deserialize data!
+            var f = e.Fragment;
+            IDPSetup = JsonConvert.DeserializeObject<IDPSetup>(e.Fragment);
         }
 
         public void OnNavigatedFrom(Windows.Navigation.NavigationEventArgs e)
@@ -60,8 +57,14 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         }
         private void GotoNextPage(object sender, System.Windows.RoutedEventArgs e)
         {
+            IDPSetup.DatabaseName = DbName.Text;
+            IDPSetup.Username = DbUSerName.Text;
+            IDPSetup.Password = DbPassword.Password;
+            IDPSetup.Servername = DbServer.Text;
+            IDPSetup.CatalogName = CatalogList.SelectionBoxItem.ToString();
+            var data = JsonConvert.SerializeObject(IDPSetup);
             //Serialize parametres using json!
-            NavigationCommands.GoToPage.Execute("/Pages/ProgressView.xaml#PutParamsHere!", null);
+            NavigationCommands.GoToPage.Execute("/Pages/ProgressView.xaml#" + data, null);
         }
 
         private void GoToPrevPage(object sender, System.Windows.RoutedEventArgs e)

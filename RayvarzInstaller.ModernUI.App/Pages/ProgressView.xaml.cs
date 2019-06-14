@@ -1,4 +1,7 @@
-﻿using RayvarzInstaller.ModernUI.Windows;
+﻿using Newtonsoft.Json;
+using RayvarzInstaller.ModernUI.App.Models;
+using RayvarzInstaller.ModernUI.App.Services;
+using RayvarzInstaller.ModernUI.Windows;
 using RayvarzInstaller.ModernUI.Windows.Navigation;
 using System;
 using System.Collections.Generic;
@@ -22,14 +25,24 @@ namespace RayvarzInstaller.ModernUI.App.Pages
     /// </summary>
     public partial class ProgressView : UserControl , IContent
     {
+        private readonly SetupServices setupServices;
+        private IDPSetup IDPSetup;
         public ProgressView()
         {
+            setupServices = new SetupServices(new SystemFileHelper() , new WebDeployHelper() , new SetupRegistry());
             InitializeComponent();
         }
 
         public void OnFragmentNavigation(Windows.Navigation.FragmentNavigationEventArgs e)
         {
-            
+            IDPSetup = JsonConvert.DeserializeObject<IDPSetup>(e.Fragment);
+            setupServices.onStateChanged += SetupServices_onStateChanged;
+            setupServices.Install(IDPSetup).ConfigureAwait(false);
+        }
+
+        private void SetupServices_onStateChanged(string message)
+        {
+            idpProgressbar.Value += 0.15;
         }
 
         public void OnNavigatedFrom(Windows.Navigation.NavigationEventArgs e)
