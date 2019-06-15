@@ -18,7 +18,8 @@ namespace RayvarzInstaller.ModernUI.App.Pages
     {
         private readonly SetupServices setupServices;
         private OperationState OperationState;
-        
+        public int ProgressValuePercent { get; set; }
+        public string ProgressTitle { get; set; }
         public ProgressView()
         {
             setupServices = new SetupServices(new SystemFileHelper() ,
@@ -34,15 +35,19 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             SetProgressbarTitle(OperationState.Operation);
             Thread longRunningThread = new Thread(new ThreadStart(delegate ()
             {
+
                 Thread.Sleep(1000);
                 Application.Current.Dispatcher.BeginInvoke((ThreadStart)delegate ()
                {
+                   ProgressTitle = "Put_ProgressTitle_Here...";
+                   ProgressValuePercent = 20;
 
                    if (OperationState.Operation == Operation.Add)
                    {
                        setupServices.Install(OperationState.Data);
 
                         //setupServices.Install(OperationState.Data).ConfigureAwait(false);
+                        
                     }
 
                    if (OperationState.Operation == Operation.Modified)

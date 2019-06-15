@@ -66,10 +66,7 @@
                             x:Name="CatalogList"
                             Width="300"
                             Height="25" >
-                            <ComboBoxItem Content="EOFFICE"></ComboBoxItem>
-                            <ComboBoxItem Content="BPMS"></ComboBoxItem>
-                            <ComboBoxItem Content="ARPG"></ComboBoxItem>
-                            <ComboBoxItem Content="RSM"></ComboBoxItem>
+                            
                         </ComboBox>
                     </StackPanel>
 

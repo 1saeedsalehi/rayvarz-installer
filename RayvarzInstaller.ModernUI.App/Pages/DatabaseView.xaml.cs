@@ -29,6 +29,20 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         {
             
             InitializeComponent();
+
+            var comboBoxItem_EOFFICE = new ComboBoxItem
+            {
+                Content = "EOFFICE",
+                IsSelected = true
+            };
+            var comboBoxItem_BPMS = new ComboBoxItem { Content = "BPMS" };
+            var comboBoxItem_ARPG = new ComboBoxItem { Content = "ARPG" };
+            var comboBoxItem_RSM = new ComboBoxItem { Content = "RSM" };
+
+            CatalogList.Items.Add(comboBoxItem_EOFFICE);
+            CatalogList.Items.Add(comboBoxItem_BPMS);
+            CatalogList.Items.Add(comboBoxItem_ARPG);
+            CatalogList.Items.Add(comboBoxItem_RSM);
         }
 
         public void OnFragmentNavigation(Windows.Navigation.FragmentNavigationEventArgs e)
@@ -87,9 +101,10 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             }
             else
             {
-                
+
                 ModernDialog.ShowMessage("ارتباط با پایگاه داده برقرار نشد", "", MessageBoxButton.OK);
             }
+
         }
 
         private void ManipulateForm() {
