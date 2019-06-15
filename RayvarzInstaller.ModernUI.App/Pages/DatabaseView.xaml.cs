@@ -29,12 +29,6 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         {
             
             InitializeComponent();
-            //initCatalog();
-        }
-
-        private void initCatalog()
-        {
-            
         }
 
         public void OnFragmentNavigation(Windows.Navigation.FragmentNavigationEventArgs e)
@@ -93,9 +87,10 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             }
             else
             {
-                
+
                 ModernDialog.ShowMessage("ارتباط با پایگاه داده برقرار نشد", "", MessageBoxButton.OK);
             }
+
         }
 
         private void ManipulateForm() {
