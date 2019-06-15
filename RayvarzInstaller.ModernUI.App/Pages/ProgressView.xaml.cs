@@ -32,36 +32,38 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             setupServices.onStateChanged += SetupServices_onStateChanged;
             setupServices.OnComleted += SetupServices_OnComleted;
             SetProgressbarTitle(OperationState.Operation);
-            Thread longRunningThread = new Thread(new ThreadStart(delegate ()
-            {
-                Thread.Sleep(1000);
-                Application.Current.Dispatcher.BeginInvoke((ThreadStart)delegate ()
-               {
-
-                   if (OperationState.Operation == Operation.Add)
-                   {
-                       setupServices.Install(OperationState.Data);
-
-                        //setupServices.Install(OperationState.Data).ConfigureAwait(false);
-                    }
-
-                   if (OperationState.Operation == Operation.Modified)
-                   {
-                        //setupServices.Update(OperationState.Data).ConfigureAwait(false);
-                        setupServices.Update(OperationState.Data , OperationState.Id);
-                   }
-                   if (OperationState.Operation == Operation.Delete)
-                   {
-                       //setupServices.Update(OperationState.Data).ConfigureAwait(false);
-                       setupServices.Delete(OperationState.Data, OperationState.Id);
-                   }
-                   Task.FromResult(true);
-               },
-                    DispatcherPriority.Normal);
-            }));
-            longRunningThread.Start();
+            //Thread longRunningThread = new Thread(new ThreadStart(delegate ()
+            //{
+            //    Thread.Sleep(1000);
+            //    Application.Current.Dispatcher.BeginInvoke((ThreadStart)delegate ()
+            //   {
 
 
+            //       Task.FromResult(true);
+            //   },
+            //        DispatcherPriority.Normal);
+            //}));
+            //longRunningThread.Start();
+
+            Task.Run(() => {
+                if (OperationState.Operation == Operation.Add)
+                {
+                    setupServices.Install(OperationState.Data);
+
+                    //setupServices.Install(OperationState.Data).ConfigureAwait(false);
+                }
+
+                if (OperationState.Operation == Operation.Modified)
+                {
+                    //setupServices.Update(OperationState.Data).ConfigureAwait(false);
+                    setupServices.Update(OperationState.Data, OperationState.Id);
+                }
+                if (OperationState.Operation == Operation.Delete)
+                {
+                    //setupServices.Update(OperationState.Data).ConfigureAwait(false);
+                    setupServices.Delete(OperationState.Data, OperationState.Id);
+                }
+            }).GetAwaiter().GetResult();
 
 
         }
