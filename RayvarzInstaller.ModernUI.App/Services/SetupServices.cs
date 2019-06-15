@@ -6,6 +6,7 @@ using Rayvarz.Systems;
 using RayvarzInstaller.ModernUI.App.Models;
 using Microsoft.Web.Administration;
 using System.Security.AccessControl;
+using System;
 
 namespace RayvarzInstaller.ModernUI.App.Services
 {
@@ -35,7 +36,7 @@ namespace RayvarzInstaller.ModernUI.App.Services
             this.setupRegistry = setupRegistry;
             this.packageResolver = packageResolver;
         }
-        public void Update(IDPSetup setupConfig)
+        public void Update(IDPSetup setupConfig , Guid packageId)
         {
             var realFileAddress = GetRealFileAddress(setupConfig.IDPPath, setupConfig.IDPFolderName);
             var realAdminAddress = GetRealFileAddress(setupConfig.AdminPath, setupConfig.AdminFolderName);
@@ -73,13 +74,32 @@ namespace RayvarzInstaller.ModernUI.App.Services
                 );
 
             var manifest = packageResolver.GetPackage();
+            var installationPath = setupRegistry[packageId];
+            setupRegistry.Remove(manifest, installationPath);
 
-            RemoveSetupRegistry(setupConfig, manifest);
             SaveSetupRegistry(setupConfig, manifest);
 
             OnComleted("End");
 
         }
+
+        public void Delete(IDPSetup setupConfig, Guid packageId)
+        {
+            var realFileAddress = GetRealFileAddress(setupConfig.IDPPath, setupConfig.IDPFolderName);
+            var realAdminAddress = GetRealFileAddress(setupConfig.AdminPath, setupConfig.AdminFolderName);
+            StopIIS();
+            DeleteVirtualDirectories(realFileAddress, realAdminAddress);
+            DeleteFiles(realFileAddress, realAdminAddress);
+
+            var manifest = packageResolver.GetPackage();
+            var installationPath = setupRegistry[packageId];
+            setupRegistry.Remove(manifest, installationPath);
+            setupRegistry.Commit();
+            StartIIS();
+            OnComleted("End");
+
+        }
+
         public void Install(IDPSetup setupConfig)
         {
             var manifest = packageResolver.GetPackage();
@@ -336,17 +356,6 @@ namespace RayvarzInstaller.ModernUI.App.Services
             setupRegistry.Add(manifest, setupPath);
             setupRegistry.Commit();
         }
-        private void RemoveSetupRegistry(IDPSetup idpSetup, Manifest manifest)
-        {
-            var setupPath = new InstallPathInfo
-            {
-                PackageId = manifest.PackageId,
-                PhysicalPath = idpSetup.IDPPath,
-                IsWeb = true
-            };
-            setupRegistry.Remove(manifest, setupPath);
-            setupRegistry.Commit();
-        }
 
         private void StartIIS()
         {
@@ -370,6 +379,7 @@ namespace RayvarzInstaller.ModernUI.App.Services
         }
 
         private void DeleteVirtualDirectories(string realFileAddress , string realAdminAddress) {
+            
             webDeployHelper.RemoveVirtualDirectory(realFileAddress);
             webDeployHelper.RemoveVirtualDirectory(realAdminAddress);
         }

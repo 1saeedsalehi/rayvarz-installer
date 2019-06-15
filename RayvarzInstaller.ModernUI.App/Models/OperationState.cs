@@ -1,8 +1,10 @@
-﻿namespace RayvarzInstaller.ModernUI.App.Models
+﻿using System;
+
+namespace RayvarzInstaller.ModernUI.App.Models
 {
     public class OperationState
     {
-        public string PackageId { get; set; }
+        public Guid Id { get; set; }
 
         public Operation Operation { get; set; }
 

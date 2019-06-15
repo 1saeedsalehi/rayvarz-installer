@@ -63,7 +63,7 @@
                         <Label Content="IDP مسیر نصب سامانه" />
                         <StackPanel Orientation="Horizontal">
                             <Button Click="ChooseDirectory" Content="انتخاب مسیر" />
-                            <TextBox x:Name="IdpInstallationPath" Width="500" Text="" />
+                            <TextBox x:Name="IdpInstallationPath" Width="500"  />
                         </StackPanel>
                     </StackPanel>
 

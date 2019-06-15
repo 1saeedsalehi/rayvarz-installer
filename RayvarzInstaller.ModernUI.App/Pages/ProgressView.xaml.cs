@@ -48,7 +48,12 @@ namespace RayvarzInstaller.ModernUI.App.Pages
                    if (OperationState.Operation == Operation.Modified)
                    {
                         //setupServices.Update(OperationState.Data).ConfigureAwait(false);
-                        setupServices.Update(OperationState.Data);
+                        setupServices.Update(OperationState.Data , OperationState.Id);
+                   }
+                   if (OperationState.Operation == Operation.Delete)
+                   {
+                       //setupServices.Update(OperationState.Data).ConfigureAwait(false);
+                       setupServices.Delete(OperationState.Data, OperationState.Id);
                    }
                    Task.FromResult(true);
                },

@@ -29,6 +29,12 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         {
             
             InitializeComponent();
+            //initCatalog();
+        }
+
+        private void initCatalog()
+        {
+            
         }
 
         public void OnFragmentNavigation(Windows.Navigation.FragmentNavigationEventArgs e)

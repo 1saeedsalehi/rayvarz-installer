@@ -54,13 +54,22 @@ namespace RayvarzInstaller.ModernUI.App.Pages
 
         private void GridRemove_Clicked(object sender, RoutedEventArgs e)
         {
-            var model = (sender as Button).DataContext as Customer;
+            var installPathInfo = (sender as Button).DataContext as InstallPathInfo;
+            var idpSetup = IDPSetupMapper(installPathInfo);
+
+            var operationState = new OperationState
+            {
+                Data = idpSetup,
+                Operation = Operation.Delete,
+                Id = installPathInfo.Id
+            };
+            var serializeSetup = JsonConvert.SerializeObject(operationState);
             //TODO: add navigation sample here!
             var dialogResult = ModernDialog.ShowMessage("Are you sure?", "Confirmation", MessageBoxButton.YesNo);
             if (dialogResult == MessageBoxResult.Yes)
             {
                 //Serialize parametres using json!
-                NavigationCommands.GoToPage.Execute("/Pages/PathView.xaml#Name=saeed&Family=Salehi", null);
+                NavigationCommands.GoToPage.Execute("/Pages/ProgressView.xaml#" + serializeSetup, null);
             }
         }
 
@@ -70,7 +79,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             var idpSetup = IDPSetupMapper(installPathInfo);
 
             var operationState = new OperationState {
-                Data = idpSetup , Operation = Operation.Modified , PackageId = installPathInfo.PackageId
+                Data = idpSetup , Operation = Operation.Modified , Id = installPathInfo.Id
             };
             //TODO: add navigation sample here!
             var serializeSetup = JsonConvert.SerializeObject(operationState);
