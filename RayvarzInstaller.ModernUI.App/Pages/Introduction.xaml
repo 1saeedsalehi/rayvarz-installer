@@ -34,7 +34,7 @@
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button>آپدیت</Button>
+                                <Button Click="GridUpdate_Clicked">آپدیت</Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
@@ -56,10 +56,6 @@
                 Click="GotoNextPage"
                 Content="مرحله بعدی"
                 IconData="F1 M 57,42L 57,34L 32.25,34L 42.25,24L 31.75,24L 17.75,38L 31.75,52L 42.25,52L 32.25,42L 57,42 Z" />
-            <mui:ModernButton
-                Click="GoToPrevPage"
-                Content="مرحله قبلی"
-                IconData="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z" />
 
         </StackPanel>
     </Grid>

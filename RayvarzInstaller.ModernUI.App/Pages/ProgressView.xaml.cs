@@ -2,21 +2,12 @@
 using RayvarzInstaller.ModernUI.App.Models;
 using RayvarzInstaller.ModernUI.App.Services;
 using RayvarzInstaller.ModernUI.Windows;
-using RayvarzInstaller.ModernUI.Windows.Navigation;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace RayvarzInstaller.ModernUI.App.Pages
 {
@@ -26,23 +17,79 @@ namespace RayvarzInstaller.ModernUI.App.Pages
     public partial class ProgressView : UserControl , IContent
     {
         private readonly SetupServices setupServices;
-        private IDPSetup IDPSetup;
+        private OperationState OperationState;
+        
         public ProgressView()
         {
-            setupServices = new SetupServices(new SystemFileHelper() , new WebDeployHelper() , new SetupRegistry());
+            setupServices = new SetupServices(new SystemFileHelper() ,
+                new WebDeployHelper() , new SetupRegistry() , new PackageResolver());
             InitializeComponent();
         }
 
         public void OnFragmentNavigation(Windows.Navigation.FragmentNavigationEventArgs e)
         {
-            IDPSetup = JsonConvert.DeserializeObject<IDPSetup>(e.Fragment);
+            OperationState = JsonConvert.DeserializeObject<OperationState>(e.Fragment);
             setupServices.onStateChanged += SetupServices_onStateChanged;
-            setupServices.Install(IDPSetup).ConfigureAwait(false);
+            setupServices.OnComleted += SetupServices_OnComleted;
+            SetProgressbarTitle(OperationState.Operation);
+            Thread longRunningThread = new Thread(new ThreadStart(delegate ()
+            {
+                Thread.Sleep(1000);
+                Application.Current.Dispatcher.BeginInvoke((ThreadStart)delegate ()
+               {
+
+                   if (OperationState.Operation == Operation.Add)
+                   {
+                       setupServices.Install(OperationState.Data);
+
+                        //setupServices.Install(OperationState.Data).ConfigureAwait(false);
+                    }
+
+                   if (OperationState.Operation == Operation.Modified)
+                   {
+                        //setupServices.Update(OperationState.Data).ConfigureAwait(false);
+                        setupServices.Update(OperationState.Data);
+                   }
+                   Task.FromResult(true);
+               },
+                    DispatcherPriority.Normal);
+            }));
+            longRunningThread.Start();
+
+
+
+
+        }
+
+        private void SetProgressbarTitle(Operation operation)
+        {
+            switch (operation)
+            {
+                case Operation.Add:
+                    progressbarTitle.Text = "در حال نصب";
+                    break;
+                case Operation.Modified:
+                    progressbarTitle.Text = "در حال بروزرسانی";
+                    break;
+                case Operation.Delete:
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void SetupServices_OnComleted(string message)
+        {
+            FinishButton.Visibility = Visibility.Visible;
         }
 
         private void SetupServices_onStateChanged(string message)
         {
-            idpProgressbar.Value += 0.15;
+            Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate ()
+            {
+                idpProgressbar.Value += 0.15; // Do all the ui thread updates here
+            }));
+            
         }
 
         public void OnNavigatedFrom(Windows.Navigation.NavigationEventArgs e)
@@ -61,6 +108,12 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         {
             
         }
-        
+
+        private void Exit_Clicked(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
+
+        }
+
     }
 }

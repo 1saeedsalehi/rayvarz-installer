@@ -15,10 +15,11 @@
         <StackPanel Grid.Row="0"  HorizontalAlignment="Center" VerticalAlignment="Center">
 
             <TextBlock
+                 x:Name="progressbarTitle"
                 Margin="0,0,0,8"
                 TextAlignment="Right"
                 Style="{StaticResource Heading2}"
-                Text="در حال نصب" />
+                 />
             <ProgressBar
                  x:Name="idpProgressbar"
                 Width="600"
@@ -27,12 +28,12 @@
                 Margin="0,0,0,16"
                 IsIndeterminate="False"
                 Maximum="1"
-                Value="0"
+              Value="0"
                 Minimum="0" />
-            
+
 
         </StackPanel>
 
-        <Button x:Name="FinishButton" Visibility="Hidden" Content="خاتمه" HorizontalAlignment="Left" Width="150" Grid.Row="1"   />
+        <Button Click="Exit_Clicked" x:Name="FinishButton" Visibility="Hidden" Content="خاتمه" HorizontalAlignment="Left" Width="150" Grid.Row="1"   />
     </Grid>
 </UserControl>

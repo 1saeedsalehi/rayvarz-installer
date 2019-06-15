@@ -26,7 +26,7 @@ namespace RayvarzInstaller.ModernUI.App.Services
         {
             get
             {
-                return this._installPaths.Select<KeyValuePair<Guid, InstallPathInfo>, InstallPathInfo>((Func<KeyValuePair<Guid, InstallPathInfo>, InstallPathInfo>)(item => item.Value)).OrderBy<InstallPathInfo, string>((Func<InstallPathInfo, string>)(item => item.PackageId)).ToList<InstallPathInfo>();
+                return this._installPaths.Select(item => item.Value).OrderBy(item => item.PackageId).ToList();
             }
         }
 
@@ -66,15 +66,15 @@ namespace RayvarzInstaller.ModernUI.App.Services
 
         private void LoadRegistry()
         {
-            if (!File.Exists(this.RegistryFilePath))
+            if (!File.Exists(RegistryFilePath))
                 return;
-            this._installPaths = JsonConvert.DeserializeObject<Dictionary<Guid, InstallPathInfo>>(File.ReadAllText(this.RegistryFilePath));
+            this._installPaths = JsonConvert.DeserializeObject<Dictionary<Guid, InstallPathInfo>>(File.ReadAllText(RegistryFilePath));
         }
 
         public void Add(Manifest manifest, InstallPathInfo info)
         {
             info.PackageId = manifest.PackageId;
-            info.System = manifest.RayvarzSystem;
+            //info.System = manifest.RayvarzSystem;
             info.Id = Guid.NewGuid();
             this._installPaths.Add(info.Id, info);
         }
@@ -91,7 +91,7 @@ namespace RayvarzInstaller.ModernUI.App.Services
             {
                 Formatting = Formatting.Indented
             };
-            JsonConvert.DefaultSettings = (Func<JsonSerializerSettings>)(() => settings);
+            JsonConvert.DefaultSettings = () => settings;
             this.CreateDefaultDirectory();
             File.WriteAllText(this.RegistryFilePath, JsonConvert.SerializeObject((object)this._installPaths));
         }

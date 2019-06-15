@@ -274,16 +274,18 @@ namespace RayvarzInstaller.ModernUI.App.Services
             bool flag = false;
             try
             {
-                using (DirectoryEntry directoryEntry = new DirectoryEntry(path.Substring(0, path.LastIndexOf("/"))))
+                using (ServerManager mgr = new ServerManager())
                 {
-                    directoryEntry.RefreshCache();
-                    DirectoryEntry entry = new DirectoryEntry(path);
-                    directoryEntry.Children.Remove(entry);
-                    directoryEntry.CommitChanges();
-                    flag = true;
+
+                    Application app = mgr.Sites["Default Web Site"].Applications['/'+path];
+                    mgr.Sites["Default Web Site"].Applications.Remove(app);
+                    
+
+                    mgr.CommitChanges();
                 }
+
             }
-            catch
+            catch (Exception ex)
             {
             }
             return flag;

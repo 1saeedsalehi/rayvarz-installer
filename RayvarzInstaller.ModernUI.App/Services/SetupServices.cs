@@ -14,6 +14,8 @@ namespace RayvarzInstaller.ModernUI.App.Services
         private readonly SystemFileHelper systemFileHelper;
         private readonly WebDeployHelper webDeployHelper;
         private readonly SetupRegistry setupRegistry;
+        private readonly PackageResolver packageResolver;
+
         public event OnStateChangedDelegtae onStateChanged;
         public event OnCancelDelegate OnCanceled;
         public event OnErrorDelegate OnError;
@@ -25,14 +27,62 @@ namespace RayvarzInstaller.ModernUI.App.Services
         public SetupServices(
             SystemFileHelper systemFileHelper,
             WebDeployHelper webDeployHelper,
-            SetupRegistry setupRegistry)
+            SetupRegistry setupRegistry,
+            PackageResolver packageResolver)
         {
             this.systemFileHelper = systemFileHelper;
             this.webDeployHelper = webDeployHelper;
             this.setupRegistry = setupRegistry;
+            this.packageResolver = packageResolver;
         }
-        public async Task Install(IDPSetup setupConfig)
+        public void Update(IDPSetup setupConfig)
         {
+            var realFileAddress = GetRealFileAddress(setupConfig.IDPPath, setupConfig.IDPFolderName);
+            var realAdminAddress = GetRealFileAddress(setupConfig.AdminPath, setupConfig.AdminFolderName);
+
+            //DeleteVirtualDirectories(realFileAddress, realAdminAddress);
+            DeleteFiles(realFileAddress, realAdminAddress);
+
+            PopulateJsonConfiguration(setupConfig.CatalogName);
+            PopulateAdminJsonConfiguration(setupConfig.CatalogName, setupConfig.IDPFolderName, setupConfig.IDPAddress);
+            CopyFile(realFileAddress);
+            CopyAdminFile(realAdminAddress);
+
+            // populate html
+            PopulateHtmlIndex(realAdminAddress, setupConfig.AdminFolderName);
+
+            //Set Settings
+            onStateChanged?.Invoke("ذخیره تنظیمات");
+            //var fileAddress = GetRealFileAddress(_userControl.txtFileAddress.Text, _userControl.txtIISName.Text);
+            SetSiteConnection(
+                realFileAddress,
+                setupConfig.DatabaseName,
+                setupConfig.Password,
+                setupConfig.Servername,
+                setupConfig.Username,
+                setupConfig.CatalogName
+                );
+
+            SetSiteConnection(
+                realAdminAddress,
+                setupConfig.DatabaseName,
+                setupConfig.Password,
+                setupConfig.Servername,
+                setupConfig.Username,
+                setupConfig.CatalogName
+                );
+
+            var manifest = packageResolver.GetPackage();
+
+            RemoveSetupRegistry(setupConfig, manifest);
+            SaveSetupRegistry(setupConfig, manifest);
+
+            OnComleted("End");
+
+        }
+        public void Install(IDPSetup setupConfig)
+        {
+            var manifest = packageResolver.GetPackage();
 
             var realFileAddress = GetRealFileAddress(setupConfig.IDPPath, setupConfig.IDPFolderName);
             var realAdminAddress = GetRealFileAddress(setupConfig.AdminPath, setupConfig.AdminFolderName);
@@ -93,13 +143,14 @@ namespace RayvarzInstaller.ModernUI.App.Services
 
             onStateChanged?.Invoke("ذخیره تنظیمات");
 
-            SaveSetupRegistry(virtualDir, realFileAddress, setupConfig.AdminFolderName, setupConfig.AdminPath, realAdminAddress, setupConfig);
+            SaveSetupRegistry(setupConfig, manifest);
             //SaveAdminSetupRegistry(setupConfig.AdminFolderName, setupConfig.AdminPath, realAdminAddress);
 
             StartIIS();
 
+            OnComleted("End");
 
-            await Task.FromResult(true);
+            //await Task.FromResult(true);
         }
 
         public void PopulateJsonConfiguration(string catalog)
@@ -256,31 +307,44 @@ namespace RayvarzInstaller.ModernUI.App.Services
             dInfo.SetAccessControl(dSecurity);
         }
 
-        private void SaveSetupRegistry(Models.VirtualDirectory virtualDir, string realFileAddress, string adminSiteName, string adminPath, string realFileAddressadmin, IDPSetup idpSetup)
+        private void SaveSetupRegistry(
+            IDPSetup idpSetup, Manifest manifest)
         {
             var setupPath = new InstallPathInfo
             {
-                PackageId = "beta_10",
-                PhysicalPath = realFileAddress,
+                PackageId = manifest.PackageId,
+                PhysicalPath = idpSetup.IDPPath,
                 IsWeb = true,
             };
 
-            setupPath.Meta.Add("ApplicationName", idpSetup.IDPFolderName);
-            setupPath.Meta.Add("ApplicationPath", idpSetup.IDPPath);
-            setupPath.Meta.Add("ApplicationNameAdmin", idpSetup.AdminFolderName);
-            setupPath.Meta.Add("ApplicationPathAdmin", idpSetup.AdminPath);
+            setupPath.Meta.Add("IDPFolderName", idpSetup.IDPFolderName);
+            setupPath.Meta.Add("IDPPath", idpSetup.IDPPath);
+            setupPath.Meta.Add("AdminFolderName", idpSetup.AdminFolderName);
+            setupPath.Meta.Add("AdminPath", idpSetup.AdminPath);
+            setupPath.Meta.Add("IDPAddress", idpSetup.IDPAddress);
             setupPath.Meta.Add("catalog", idpSetup.CatalogName);
             setupPath.Meta.Add("databasename", idpSetup.DatabaseName);
             setupPath.Meta.Add("username", idpSetup.Username);
-            setupPath.Meta.Add("password", idpSetup.Password);
+            //setupPath.Meta.Add("password", idpSetup.Password);
             setupPath.Meta.Add("servername", idpSetup.Servername);
 
             //setupPath.Meta.Add("ApplicationName", virtualDir.Name);
             //setupPath.Meta.Add("ApplicationPath", virtualDir.Path);
             //setupPath.Meta.Add("ApplicationNameAdmin", adminSiteName);
             //setupPath.Meta.Add("ApplicationPathAdmin", adminPath);
-            setupPath.Meta.Add("PhysicalPathAdmin", realFileAddressadmin);
-            setupRegistry.Add(_manifest, setupPath);
+            //setupPath.Meta.Add("PhysicalPathAdmin", realFileAddressadmin);
+            setupRegistry.Add(manifest, setupPath);
+            setupRegistry.Commit();
+        }
+        private void RemoveSetupRegistry(IDPSetup idpSetup, Manifest manifest)
+        {
+            var setupPath = new InstallPathInfo
+            {
+                PackageId = manifest.PackageId,
+                PhysicalPath = idpSetup.IDPPath,
+                IsWeb = true
+            };
+            setupRegistry.Remove(manifest, setupPath);
             setupRegistry.Commit();
         }
 
@@ -303,6 +367,17 @@ namespace RayvarzInstaller.ModernUI.App.Services
             //}
 
             return string.Format("{0}{1}", fileAddress, iisName);
+        }
+
+        private void DeleteVirtualDirectories(string realFileAddress , string realAdminAddress) {
+            webDeployHelper.RemoveVirtualDirectory(realFileAddress);
+            webDeployHelper.RemoveVirtualDirectory(realAdminAddress);
+        }
+
+        private void DeleteFiles(string realFileAddress, string realAdminAddress)
+        {
+            systemFileHelper.Delete(realFileAddress);
+            systemFileHelper.Delete(realAdminAddress);
         }
     }
 

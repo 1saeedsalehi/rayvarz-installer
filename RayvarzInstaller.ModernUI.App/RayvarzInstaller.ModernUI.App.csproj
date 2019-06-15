@@ -87,12 +87,14 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\Exceptions\DuplicatePackageException.cs" />
     <Compile Include="Models\IDPSetup.cs" />
     <Compile Include="Models\IisApplicationPool.cs" />
     <Compile Include="Models\IisEntry.cs" />
     <Compile Include="Models\InstallPathInfo.cs" />
     <Compile Include="Models\Manifest.cs" />
     <Compile Include="Models\OnStateChangedDelegate.cs" />
+    <Compile Include="Models\OperationState.cs" />
     <Compile Include="Models\RayvarzSystem.cs" />
     <Compile Include="Models\StateInfo.cs" />
     <Compile Include="Models\VirtualDirectory.cs" />
@@ -111,6 +113,7 @@
     <Compile Include="Services\IWebDeployHelper.cs" />
     <Compile Include="Models\OnSubStateChangedDelegtae.cs" />
     <Compile Include="Services\ManifestParser.cs" />
+    <Compile Include="Services\PackageResolver.cs" />
     <Compile Include="Services\SetupRegistry.cs" />
     <Compile Include="Services\SetupServices.cs" />
     <Compile Include="Services\SimpleJSON.cs" />

@@ -1,7 +1,9 @@
 ﻿using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Newtonsoft.Json;
 using RayvarzInstaller.ModernUI.App.Models;
 using RayvarzInstaller.ModernUI.App.Services;
 using RayvarzInstaller.ModernUI.Windows;
@@ -20,15 +22,22 @@ namespace RayvarzInstaller.ModernUI.App.Pages
     /// </summary>
     public partial class Introduction : UserControl , IContent
     {
+        private PackageResolver PackageResolver;
         
         public Introduction()
         {
             
             InitializeComponent();
+            var m = GetPackeInformation();
             ObservableCollection<InstallPathInfo> custdata = GetData();
 
             //Bind the DataGrid to the customer data
             DG1.DataContext = custdata;
+        }
+
+        private Manifest GetPackeInformation() {
+            PackageResolver = new PackageResolver();
+            return PackageResolver.GetPackage();
         }
 
         private ObservableCollection<InstallPathInfo> GetData()
@@ -53,6 +62,20 @@ namespace RayvarzInstaller.ModernUI.App.Pages
                 //Serialize parametres using json!
                 NavigationCommands.GoToPage.Execute("/Pages/PathView.xaml#Name=saeed&Family=Salehi", null);
             }
+        }
+
+        private void GridUpdate_Clicked(object sender, RoutedEventArgs e)
+        {
+            var installPathInfo = (sender as Button).DataContext as InstallPathInfo;
+            var idpSetup = IDPSetupMapper(installPathInfo);
+
+            var operationState = new OperationState {
+                Data = idpSetup , Operation = Operation.Modified , PackageId = installPathInfo.PackageId
+            };
+            //TODO: add navigation sample here!
+            var serializeSetup = JsonConvert.SerializeObject(operationState);
+            NavigationCommands.GoToPage.Execute("/Pages/PathView.xaml#" + serializeSetup, null);
+
         }
 
         public void OnFragmentNavigation(FragmentNavigationEventArgs e)
@@ -82,12 +105,28 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         private void GotoNextPage(object sender, System.Windows.RoutedEventArgs e)
         {
             //Serialize parametres using json!
-            NavigationCommands.GoToPage.Execute("/Pages/PathView.xaml", null);
+            var operationState = new OperationState {
+                Operation = Operation.Add , Data = new IDPSetup()
+            };
+            var transferData = JsonConvert.SerializeObject(operationState);
+            NavigationCommands.GoToPage.Execute("/Pages/PathView.xaml#" + transferData, null);
         }
 
-        private void GoToPrevPage(object sender, System.Windows.RoutedEventArgs e)
-        {
-            NavigationCommands.GoToPage.Execute("/Pages/Introduction.xaml", null);
+        private IDPSetup IDPSetupMapper(InstallPathInfo installPathInfo) {
+            
+            var idpSetup = new IDPSetup();
+
+            idpSetup.IDPPath = installPathInfo.Meta["IDPPath"];
+            idpSetup.IDPFolderName = installPathInfo.Meta["IDPFolderName"];
+            idpSetup.AdminFolderName = installPathInfo.Meta["AdminFolderName"];
+            idpSetup.AdminPath = installPathInfo.Meta["AdminPath"];
+            idpSetup.IDPAddress = installPathInfo.Meta["IDPAddress"];
+            idpSetup.Servername = installPathInfo.Meta["servername"];
+            idpSetup.DatabaseName = installPathInfo.Meta["databasename"];
+            idpSetup.CatalogName = installPathInfo.Meta["catalog"];
+            idpSetup.Username = installPathInfo.Meta["username"];
+
+            return idpSetup;
         }
     }
 }

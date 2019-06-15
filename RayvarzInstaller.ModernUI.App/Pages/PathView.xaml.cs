@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Microsoft.Web.Administration;
@@ -10,9 +11,10 @@ using RayvarzInstaller.ModernUI.Windows.Navigation;
 
 namespace RayvarzInstaller.ModernUI.App.Pages
 {
-   
+
     public partial class PathView : System.Windows.Controls.UserControl, IContent
     {
+        private OperationState OperationState;
         public PathView()
         {
             InitializeComponent();
@@ -40,7 +42,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
 
         private void ModernButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            
+
 
 
         }
@@ -49,6 +51,18 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             //occures after navigateTo method
             //read passed data from e.Fragment
             //deserialize data!
+            OperationState = JsonConvert.DeserializeObject<OperationState>(e.Fragment);
+
+            if (OperationState.Operation == Operation.Modified)
+            {
+                ManipulateForm();
+            }
+
+            if (OperationState.Operation == Operation.Add)
+            {
+                ResetForm();
+                FillFileAddress();
+            }
         }
 
         public void OnNavigatedFrom(NavigationEventArgs e)
@@ -59,7 +73,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         {
             //occures when navigated to this page!
             //e.NavigationType can be New,Back,Refresh
-            
+
         }
 
         public void OnNavigatingFrom(NavigatingCancelEventArgs e)
@@ -71,17 +85,16 @@ namespace RayvarzInstaller.ModernUI.App.Pages
 
         private void GotoNextPage(object sender, System.Windows.RoutedEventArgs e)
         {
-            var idpSetting = new IDPSetup
-            {
-                IDPFolderName = IdpPathOnIIS.Text,
-                IDPPath = IdpInstallationPath.Text,
-                AdminFolderName = IISAdminManagementName.Text,
-                AdminPath = IdpManagementInstallationPath.Text,
-                IDPAddress = IdpServerPath.Text,
-            };
-            var transferData = JsonConvert.SerializeObject(idpSetting);
+
+            OperationState.Data.IDPFolderName = IdpPathOnIIS.Text.ToLower();
+            OperationState.Data.IDPPath = IdpInstallationPath.Text;
+            OperationState.Data.AdminFolderName = IISAdminManagementName.Text.ToLower();
+            OperationState.Data.AdminPath = IdpManagementInstallationPath.Text;
+            OperationState.Data.IDPAddress = IdpServerPath.Text;
+
+            var transferData = JsonConvert.SerializeObject(OperationState);
             //Serialize parametres using json!
-            NavigationCommands.GoToPage.Execute("/Pages/DatabaseView.xaml#"+transferData,null); 
+            NavigationCommands.GoToPage.Execute("/Pages/DatabaseView.xaml#" + transferData, null);
         }
 
         private void GoToPrevPage(object sender, System.Windows.RoutedEventArgs e)
@@ -106,6 +119,20 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             IdpInstallationPath.Text = !(string.IsNullOrEmpty(fileAddress)) ? fileAddress : "C:\\inetpub\\wwwroot\\";
             IdpManagementInstallationPath.Text = !(string.IsNullOrEmpty(fileAddress)) ? fileAddress : "C:\\inetpub\\wwwroot\\";
             IdpServerPath.Text = "http://localhost";
+        }
+
+        private void ManipulateForm()
+        {
+            IdpPathOnIIS.Text = OperationState.Data.IDPFolderName;
+            IdpInstallationPath.Text = OperationState.Data.IDPPath;
+            IISAdminManagementName.Text = OperationState.Data.AdminFolderName;
+            IdpManagementInstallationPath.Text = OperationState.Data.AdminPath;
+            IdpServerPath.Text = OperationState.Data.IDPAddress;
+        }
+
+        private void ResetForm() {
+            IdpPathOnIIS.Text = "";
+            IISAdminManagementName.Text = "";
         }
     }
 }
