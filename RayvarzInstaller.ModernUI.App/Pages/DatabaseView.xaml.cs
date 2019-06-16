@@ -25,19 +25,24 @@ namespace RayvarzInstaller.ModernUI.App.Pages
     public partial class DatabaseView : UserControl,IContent
     {
         private OperationState OperationState;
+        
         public DatabaseView()
-        {
-            
+        {   
             InitializeComponent();
-            FillCatalog();
+            FillCatalog(null);
         }
 
-        private void FillCatalog()
+        private void FillCatalog(string selectedItem)
         {
-            CatalogList.Items.Add(new ComboBoxItem { Content = "EOFFICE" });
-            CatalogList.Items.Add(new ComboBoxItem { Content = "BPMS" });
-            CatalogList.Items.Add(new ComboBoxItem { Content = "ARPG" });
-            CatalogList.Items.Add(new ComboBoxItem { Content = "RSM" });
+            string[] items = { "EOFFICE", "BPMS", "ARPG", "RSM" };
+            foreach (var item in items)
+            {
+                if (!string.IsNullOrEmpty(selectedItem) && item == selectedItem)
+                {
+                    CatalogList.Items.Add(new ComboBoxItem { Content = item, IsSelected = true });
+                }
+                CatalogList.Items.Add(new ComboBoxItem { Content = item});
+            }
         }
 
         public void OnFragmentNavigation(Windows.Navigation.FragmentNavigationEventArgs e)
@@ -45,7 +50,6 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             //occures after navigateTo method
             //read passed data from e.Fragment
             //deserialize data!
-            var f = e.Fragment;
             OperationState = JsonConvert.DeserializeObject<OperationState>(e.Fragment);
             ManipulateForm();
             
@@ -114,8 +118,8 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             DbName.Text = OperationState.Data.DatabaseName;
             DbUSerName.Text = OperationState.Data.Username ;
             DbServer.Text = OperationState.Data.Servername;
-            CatalogList.SelectedItem = new ComboBoxItem { Content = OperationState.Data.CatalogName , IsSelected = true};
-            
+            FillCatalog(OperationState.Data.CatalogName);
+
         }
 
         public bool ValidateConnection()

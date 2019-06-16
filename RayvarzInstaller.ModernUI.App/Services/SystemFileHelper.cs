@@ -1,5 +1,5 @@
 ﻿using ChinhDo.Transactions.FileManager;
-using IWshRuntimeLibrary;
+//using IWshRuntimeLibrary;
 using RayvarzInstaller.ModernUI.App.Models;
 using System;
 using System.Collections.Generic;
@@ -106,11 +106,11 @@ namespace RayvarzInstaller.ModernUI.App.Services
                 this._fileManager.CreateDirectory(destinationPath);
             if (System.IO.File.Exists(Path.Combine(destinationPath, linkName)))
                 this._fileManager.Delete(Path.Combine(destinationPath, linkName));
-            WshShortcut shortcut = (WshShortcut)new WshShellClass().CreateShortcut(Path.Combine(destinationPath, linkName));
-            shortcut.Description = description;
-            shortcut.TargetPath = sourceFilePath;
-            shortcut.WorkingDirectory = Path.GetDirectoryName(sourceFilePath);
-            shortcut.Save();
+            //WshShortcut shortcut = (WshShortcut)new WshShellClass().CreateShortcut(Path.Combine(destinationPath, linkName));
+            //shortcut.Description = description;
+            //shortcut.TargetPath = sourceFilePath;
+            //shortcut.WorkingDirectory = Path.GetDirectoryName(sourceFilePath);
+            //shortcut.Save();
         }
 
         public void SetFolderPermission(string path, FileSystemAccessRule accessRule)
