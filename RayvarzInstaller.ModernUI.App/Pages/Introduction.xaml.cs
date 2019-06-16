@@ -31,7 +31,10 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             ObservableCollection<InstallPathInfo> custdata = GetData();
 
             //Bind the DataGrid to the customer data
-            DG1.DataContext = custdata;
+            foreach (var item in custdata)
+            {
+                DG1.Items.Add(item);
+            }
         }
 
         private void GetPackeInformation() {
@@ -65,7 +68,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             };
             var serializeSetup = JsonConvert.SerializeObject(operationState);
             //TODO: add navigation sample here!
-            var dialogResult = ModernDialog.ShowMessage("قصد حذف این نسخه را دارید ؟", "Confirmation", MessageBoxButton.YesNo);
+            var dialogResult = ModernDialog.ShowMessage("قصد حذف این نسخه را دارید ؟", "", MessageBoxButton.YesNo);
             if (dialogResult == MessageBoxResult.Yes)
             {
                 //Serialize parametres using json!

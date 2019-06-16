@@ -6,8 +6,10 @@
     xmlns:mui="http://RayvarzInstallersoftware.com/ModernUI"
     HorizontalAlignment="Right" 
     HorizontalContentAlignment="Right"
+    FlowDirection="RightToLeft"
     Title="نصاب رایورز"
     Width="800"
+    
     Height="600"
     ContentSource="/Pages/Introduction.xaml"
     IsTitleVisible="False">

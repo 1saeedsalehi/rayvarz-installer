@@ -42,7 +42,7 @@ namespace RayvarzInstaller.ModernUI.Windows.Controls
         {
             this.DefaultStyleKey = typeof(ModernDialog);
             this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-
+            
             this.closeCommand = new RelayCommand(o => {
                 var result = o as MessageBoxResult?;
                 if (result.HasValue) {
@@ -203,7 +203,7 @@ namespace RayvarzInstaller.ModernUI.Windows.Controls
         {
             var dlg = new ModernDialog {
                 Title = title,
-                Content = new BBCodeBlock { BBCode = text, Margin = new Thickness(0, 0, 0, 8) },
+                Content = new BBCodeBlock { BBCode = text, Margin = new Thickness(0, 0, 0, 8),FlowDirection=FlowDirection.RightToLeft},
                 MinHeight = 0,
                 MinWidth = 0,
                 MaxHeight = 480,

@@ -38,7 +38,7 @@ namespace RayvarzInstaller.ModernUI.App
         protected override void OnStartup(StartupEventArgs e)
         {
             AppearanceManager.Current.AccentColor = Color.FromRgb(47, 61, 136);
-            AppearanceManager.Current.ThemeSource = AppearanceManager.LightThemeSource;
+            AppearanceManager.Current.ThemeSource = AppearanceManager.DarkThemeSource;
             base.OnStartup(e);
         }
 

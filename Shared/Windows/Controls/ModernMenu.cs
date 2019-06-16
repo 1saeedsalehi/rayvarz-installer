@@ -81,37 +81,17 @@ namespace RayvarzInstaller.ModernUI.Windows.Controls
 
         private static void OnSelectedLinkGroupChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            // retrieve the selected link from the group
-            var group = (LinkGroup)e.NewValue;
-            Link selectedLink = null;
-            if (group != null) {
-                selectedLink = group.SelectedLink;
-
-                // if no link selected or link doesn't exist in group links, auto-select first
-                if (group.Links != null) {
-                    if (selectedLink != null && !group.Links.Any(l => l == selectedLink)) {
-                        selectedLink = null;
-                    }
-
-                    if (selectedLink == null) {
-                        selectedLink = group.Links.FirstOrDefault();
-                    }
-                }
-            }
-
-            // update the selected link
-            ((ModernMenu)o).SetCurrentValue(SelectedLinkProperty, selectedLink);
         }
 
         private static void OnSelectedLinkChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             // update selected source
-            var newValue = (Link)e.NewValue;
-            Uri selectedSource = null;
-            if (newValue != null) {
-                selectedSource = newValue.Source;
-            }
-            ((ModernMenu)o).SetCurrentValue(SelectedSourceProperty, selectedSource);
+            //var newValue = (Link)e.NewValue;
+            //Uri selectedSource = null;
+            //if (newValue != null) {
+            //    selectedSource = newValue.Source;
+            //}
+            //((ModernMenu)o).SetCurrentValue(SelectedSourceProperty, selectedSource);
         }
 
         private void OnLinkGroupsCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

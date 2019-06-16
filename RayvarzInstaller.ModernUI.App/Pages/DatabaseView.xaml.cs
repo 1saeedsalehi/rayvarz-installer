@@ -29,7 +29,6 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         public DatabaseView()
         {   
             InitializeComponent();
-            FillCatalog(null);
         }
 
         private void FillCatalog(string selectedItem)
@@ -51,6 +50,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             //read passed data from e.Fragment
             //deserialize data!
             OperationState = JsonConvert.DeserializeObject<OperationState>(e.Fragment);
+            
             ManipulateForm();
             
         }

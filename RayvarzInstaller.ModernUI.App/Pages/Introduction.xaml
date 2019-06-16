@@ -8,7 +8,9 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:mui="http://RayvarzInstallersoftware.com/ModernUI"
     d:DesignHeight="300"
+    
     d:DesignWidth="300"
+    FlowDirection="LeftToRight"
     mc:Ignorable="d">
     <Grid>
 
@@ -20,14 +22,14 @@
             <TextBlock
                 TextAlignment="Right"
                 Margin="0,0,0,8"
-                DockPanel.Dock="Top"
-                Style="{StaticResource Heading2}"
                 Text="نسخه های نصب شده" />
             <DataGrid
+                FlowDirection="RightToLeft"
                 Name="DG1"
                 AutoGenerateColumns="False"
                 ItemsSource="{Binding}">
                 <DataGrid.Columns>
+
 
                     <mui:DataGridTextColumn Binding="{Binding IISName}" Header="نام" />
                     <mui:DataGridTextColumn Binding="{Binding PackageId}" Header="نسخه" />
@@ -49,20 +51,22 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <TextBlock
+            <StackPanel Margin="0,50">
+                <TextBlock
                 
                 TextAlignment="Right"
                 Margin="0,0,0,8"
-                DockPanel.Dock="Top"
-                Style="{StaticResource Heading2}"
+                
+                
                 Text="نسخه آماده نصب" />
-            <TextBlock
+                <TextBlock
                 Name="txtCurrentVersion"
                 TextAlignment="Right"
                 Margin="0,0,0,8"
-                DockPanel.Dock="Top"
+                
                 Style="{StaticResource Heading2}"
                 Text="نسخه آماده نصب" />
+            </StackPanel>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
 
