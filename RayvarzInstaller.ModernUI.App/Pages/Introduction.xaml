@@ -19,6 +19,8 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0">
+
+            
             <TextBlock
                 TextAlignment="Right"
                 Margin="0,0,0,8"
@@ -51,7 +53,7 @@
                     </DataGridTemplateColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <StackPanel Margin="0,50">
+            <StackPanel Margin="0,50,0,0">
                 <TextBlock
                 
                 TextAlignment="Right"
@@ -63,10 +65,10 @@
                 Name="txtCurrentVersion"
                 TextAlignment="Right"
                 Margin="0,0,0,8"
-                
                 Style="{StaticResource Heading2}"
                 Text="نسخه آماده نصب" />
             </StackPanel>
+            <Image Opacity="0.1" Source="/Assets/Fingerprint.png" HorizontalAlignment="Center" VerticalAlignment="Center" Height="300"/>
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
 

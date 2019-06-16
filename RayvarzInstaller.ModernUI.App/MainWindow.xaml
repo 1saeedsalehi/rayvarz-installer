@@ -9,12 +9,11 @@
     FlowDirection="RightToLeft"
     Title="نصاب رایورز"
     Width="800"
-    
     Height="600"
     ContentSource="/Pages/Introduction.xaml"
     IsTitleVisible="False">
 
-
+    
 
     <mui:ModernWindow.MenuLinkGroups>
         <mui:LinkGroup DisplayName="خوش آمدید">
