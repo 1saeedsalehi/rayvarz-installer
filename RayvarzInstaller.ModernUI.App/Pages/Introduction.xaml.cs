@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -28,16 +27,17 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         {
             
             InitializeComponent();
-            var m = GetPackeInformation();
+            GetPackeInformation();
             ObservableCollection<InstallPathInfo> custdata = GetData();
 
             //Bind the DataGrid to the customer data
             DG1.DataContext = custdata;
         }
 
-        private Manifest GetPackeInformation() {
+        private void GetPackeInformation() {
             PackageResolver = new PackageResolver();
-            return PackageResolver.GetPackage();
+            var manifest = PackageResolver.GetPackage();
+            txtCurrentVersion.Text = manifest.PackageId;
         }
 
         private ObservableCollection<InstallPathInfo> GetData()
@@ -65,7 +65,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             };
             var serializeSetup = JsonConvert.SerializeObject(operationState);
             //TODO: add navigation sample here!
-            var dialogResult = ModernDialog.ShowMessage("Are you sure?", "Confirmation", MessageBoxButton.YesNo);
+            var dialogResult = ModernDialog.ShowMessage("قصد حذف این نسخه را دارید ؟", "Confirmation", MessageBoxButton.YesNo);
             if (dialogResult == MessageBoxResult.Yes)
             {
                 //Serialize parametres using json!

@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Threading.Tasks;
 using Rayvarz.Systems.Properties.Connections;
 using Rayvarz.Systems.Properties;
 using Rayvarz.Systems;
@@ -36,7 +35,7 @@ namespace RayvarzInstaller.ModernUI.App.Services
             this.setupRegistry = setupRegistry;
             this.packageResolver = packageResolver;
         }
-        public void Update(IDPSetup setupConfig , Guid packageId)
+        public void Update(IDPSetup setupConfig, Guid packageId)
         {
             var realFileAddress = GetRealFileAddress(setupConfig.IDPPath, setupConfig.IDPFolderName);
             var realAdminAddress = GetRealFileAddress(setupConfig.AdminPath, setupConfig.AdminFolderName);
@@ -79,7 +78,7 @@ namespace RayvarzInstaller.ModernUI.App.Services
 
             SaveSetupRegistry(setupConfig, manifest);
 
-            OnComleted("End");
+            OnComleted("خدا را شکر عملیات بروزرسانی نسخه مورد نظر با موفقیت پایان پذیرفت  ");
 
         }
 
@@ -88,7 +87,8 @@ namespace RayvarzInstaller.ModernUI.App.Services
             var realFileAddress = GetRealFileAddress(setupConfig.IDPPath, setupConfig.IDPFolderName);
             var realAdminAddress = GetRealFileAddress(setupConfig.AdminPath, setupConfig.AdminFolderName);
             StopIIS();
-            DeleteVirtualDirectories(realFileAddress, realAdminAddress);
+            DeleteVirtualDirectories(setupConfig.IDPFolderName, setupConfig.AdminFolderName);
+            DeleteApplicationPool(setupConfig.IDPFolderName, setupConfig.AdminFolderName);
             DeleteFiles(realFileAddress, realAdminAddress);
 
             var manifest = packageResolver.GetPackage();
@@ -96,7 +96,7 @@ namespace RayvarzInstaller.ModernUI.App.Services
             setupRegistry.Remove(manifest, installationPath);
             setupRegistry.Commit();
             StartIIS();
-            OnComleted("End");
+            OnComleted("عملیات حذف نسخه مورد نظر با موفقیت پایان پذیرفت");
 
         }
 
@@ -169,6 +169,8 @@ namespace RayvarzInstaller.ModernUI.App.Services
             StartIIS();
 
             OnComleted("End");
+
+            OnComleted("خدا را شکر عملیات نصب نسخه مورد نظر با موفقیت پایان پذیرفت  ");
 
             //await Task.FromResult(true);
         }
@@ -296,10 +298,27 @@ namespace RayvarzInstaller.ModernUI.App.Services
             {
                 ApplicationPool appPool = serverManager.ApplicationPools[iisName];
                 appPool.ManagedRuntimeVersion = "";
+
                 serverManager.CommitChanges();
             }
 
             return virtualDir;
+        }
+
+        private void DeleteApplicationPool(string realFileAddress, string realAdminAddress)
+        {
+            DeleteApplicationPool(realFileAddress);
+            DeleteApplicationPool(realAdminAddress);
+        }
+
+        private void DeleteApplicationPool(string iisName)
+        {
+            using (ServerManager serverManager = new ServerManager())
+            {
+                ApplicationPool appPool = serverManager.ApplicationPools[iisName];
+                serverManager.ApplicationPools.Remove(appPool);
+                serverManager.CommitChanges();
+            }
         }
 
         public void SetPermissions(string address)
@@ -333,8 +352,7 @@ namespace RayvarzInstaller.ModernUI.App.Services
             var setupPath = new InstallPathInfo
             {
                 PackageId = manifest.PackageId,
-                PhysicalPath = idpSetup.IDPPath,
-                IsWeb = true,
+                IISName = idpSetup.IDPFolderName
             };
 
             setupPath.Meta.Add("IDPFolderName", idpSetup.IDPFolderName);
@@ -378,8 +396,9 @@ namespace RayvarzInstaller.ModernUI.App.Services
             return string.Format("{0}{1}", fileAddress, iisName);
         }
 
-        private void DeleteVirtualDirectories(string realFileAddress , string realAdminAddress) {
-            
+        private void DeleteVirtualDirectories(string realFileAddress, string realAdminAddress)
+        {
+
             webDeployHelper.RemoveVirtualDirectory(realFileAddress);
             webDeployHelper.RemoveVirtualDirectory(realAdminAddress);
         }

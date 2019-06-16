@@ -29,6 +29,15 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         {
             
             InitializeComponent();
+            FillCatalog();
+        }
+
+        private void FillCatalog()
+        {
+            CatalogList.Items.Add(new ComboBoxItem { Content = "EOFFICE" });
+            CatalogList.Items.Add(new ComboBoxItem { Content = "BPMS" });
+            CatalogList.Items.Add(new ComboBoxItem { Content = "ARPG" });
+            CatalogList.Items.Add(new ComboBoxItem { Content = "RSM" });
         }
 
         public void OnFragmentNavigation(Windows.Navigation.FragmentNavigationEventArgs e)
@@ -61,15 +70,23 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         }
         private void GotoNextPage(object sender, System.Windows.RoutedEventArgs e)
         {
-            
-            OperationState.Data.DatabaseName = DbName.Text;
-            OperationState.Data.Username = DbUSerName.Text;
-            OperationState.Data.Password = DbPassword.Password;
-            OperationState.Data.Servername = DbServer.Text;
-            OperationState.Data.CatalogName = CatalogList.SelectionBoxItem.ToString();
-            var dataTransfer = JsonConvert.SerializeObject(OperationState);
-            //Serialize parametres using json!
-            NavigationCommands.GoToPage.Execute("/Pages/ProgressView.xaml#" + dataTransfer, null);
+            var validationResult = ValidateForm();
+
+            if (validationResult.Errors.Count() > 0)
+            {
+                ModernDialog.ShowMessage(string.Join("\r\n", validationResult.Errors), "", MessageBoxButton.OK);
+            }
+            else
+            {
+                OperationState.Data.DatabaseName = DbName.Text;
+                OperationState.Data.Username = DbUSerName.Text;
+                OperationState.Data.Password = DbPassword.Password;
+                OperationState.Data.Servername = DbServer.Text;
+                OperationState.Data.CatalogName = CatalogList.SelectionBoxItem.ToString();
+                var dataTransfer = JsonConvert.SerializeObject(OperationState);
+                //Serialize parametres using json!
+                NavigationCommands.GoToPage.Execute("/Pages/ProgressView.xaml#" + dataTransfer, null);
+            }
         }
 
         private void GoToPrevPage(object sender, System.Windows.RoutedEventArgs e)
@@ -97,7 +114,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             DbName.Text = OperationState.Data.DatabaseName;
             DbUSerName.Text = OperationState.Data.Username ;
             DbServer.Text = OperationState.Data.Servername;
-            CatalogList.SelectedValue = OperationState.Data.CatalogName;
+            CatalogList.SelectedItem = new ComboBoxItem { Content = OperationState.Data.CatalogName , IsSelected = true};
             
         }
 
@@ -117,6 +134,37 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             {
                 return false;
             }
+        }
+
+        private ErrorMessages ValidateForm()
+        {
+            var errorMessages = new ErrorMessages();
+
+            if (CatalogList.SelectedItem == null)
+            {
+                errorMessages.Errors.Add("نام کاتالوگ حتما باید انتخاب شود !");
+            }
+
+            if (string.IsNullOrEmpty(DbUSerName.Text))
+            {
+                errorMessages.Errors.Add("نام کاربری خالی است");
+            }
+
+            if (string.IsNullOrEmpty(DbName.Text))
+            {
+                errorMessages.Errors.Add("نام پایگاه داده خالی است");
+            }
+
+            if (string.IsNullOrEmpty(DbServer.Text))
+            {
+                errorMessages.Errors.Add("آدرس سرور پایگاه داده خالی است");
+            }
+
+            if (string.IsNullOrEmpty(DbPassword.Password))
+            {
+                errorMessages.Errors.Add("کلمه عبور خالی است");
+            }
+            return errorMessages;
         }
     }
 }

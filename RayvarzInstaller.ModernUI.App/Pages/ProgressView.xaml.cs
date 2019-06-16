@@ -4,7 +4,6 @@ using RayvarzInstaller.ModernUI.App.Services;
 using RayvarzInstaller.ModernUI.Windows;
 using System;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -14,7 +13,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
     /// <summary>
     /// Interaction logic for LayoutBasic.xaml
     /// </summary>
-    public partial class ProgressView : UserControl , IContent
+    public partial class ProgressView : UserControl, IContent
     {
         private readonly SetupServices setupServices;
         private OperationState OperationState;
@@ -22,8 +21,8 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         public string ProgressTitle { get; set; }
         public ProgressView()
         {
-            setupServices = new SetupServices(new SystemFileHelper() ,
-                new WebDeployHelper() , new SetupRegistry() , new PackageResolver());
+            setupServices = new SetupServices(new SystemFileHelper(),
+                new WebDeployHelper(), new SetupRegistry(), new PackageResolver());
             InitializeComponent();
         }
 
@@ -38,28 +37,27 @@ namespace RayvarzInstaller.ModernUI.App.Pages
                 Thread.Sleep(1000);
                 Application.Current.Dispatcher.BeginInvoke((ThreadStart)delegate ()
                {
+                   if (OperationState.Operation == Operation.Add)
+                   {
+                       setupServices.Install(OperationState.Data);
 
-            Task.Run(() => {
-                if (OperationState.Operation == Operation.Add)
-                {
-                    setupServices.Install(OperationState.Data);
+                       //setupServices.Install(OperationState.Data).ConfigureAwait(false);
+                   }
 
-                        //setupServices.Install(OperationState.Data).ConfigureAwait(false);
-                    }
-
-                if (OperationState.Operation == Operation.Modified)
-                {
-                    //setupServices.Update(OperationState.Data).ConfigureAwait(false);
-                    setupServices.Update(OperationState.Data, OperationState.Id);
-                }
-                if (OperationState.Operation == Operation.Delete)
-                {
-                    //setupServices.Update(OperationState.Data).ConfigureAwait(false);
-                    setupServices.Delete(OperationState.Data, OperationState.Id);
-                }
-            }).GetAwaiter().GetResult();
-
-
+                   if (OperationState.Operation == Operation.Modified)
+                   {
+                       //setupServices.Update(OperationState.Data).ConfigureAwait(false);
+                       setupServices.Update(OperationState.Data, OperationState.Id);
+                   }
+                   if (OperationState.Operation == Operation.Delete)
+                   {
+                       //setupServices.Update(OperationState.Data).ConfigureAwait(false);
+                       setupServices.Delete(OperationState.Data, OperationState.Id);
+                   }
+               });
+            }));
+            longRunningThread.Start();
+            
         }
 
         private void SetProgressbarTitle(Operation operation)
@@ -73,6 +71,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
                     progressbarTitle.Text = "در حال بروزرسانی";
                     break;
                 case Operation.Delete:
+                    progressbarTitle.Text = "در حال حذف";
                     break;
                 default:
                     break;
@@ -82,6 +81,9 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         private void SetupServices_OnComleted(string message)
         {
             FinishButton.Visibility = Visibility.Visible;
+            idpProgressbar.Visibility = Visibility.Hidden;
+            progressbarTitle.Visibility = Visibility.Hidden;
+            progressbarStatus.Text = message;
         }
 
         private void SetupServices_onStateChanged(string message)
@@ -90,24 +92,24 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             {
                 idpProgressbar.Value += 0.15; // Do all the ui thread updates here
             }));
-            
+
         }
 
         public void OnNavigatedFrom(Windows.Navigation.NavigationEventArgs e)
         {
-            
+
         }
 
         public void OnNavigatedTo(Windows.Navigation.NavigationEventArgs e)
         {
             //e.Content
             //Do Stuff here!
-            
+
         }
 
         public void OnNavigatingFrom(Windows.Navigation.NavigatingCancelEventArgs e)
         {
-            
+
         }
 
         private void Exit_Clicked(object sender, RoutedEventArgs e)
