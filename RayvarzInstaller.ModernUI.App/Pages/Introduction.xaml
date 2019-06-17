@@ -22,6 +22,7 @@
 
             
             <TextBlock
+                Name="DGTitle"
                 TextAlignment="Right"
                 Margin="0,0,0,8"
                 Text="نسخه های نصب شده" />

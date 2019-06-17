@@ -56,15 +56,28 @@
                     </StackPanel.Resources>
 
                     <StackPanel Orientation="Vertical">
+                        <Label Content="نام دامین" />
+                        <ComboBox
+                            TabIndex="1"
+                            FlowDirection="RightToLeft"
+                            x:Name="DomainList"
+                            Width="305"
+                            Height="25" >
+
+                        </ComboBox>
+                    </StackPanel>
+
+
+                    <StackPanel Orientation="Vertical">
                         <Label Content="IIS در IDP نام پوشه سامانه" />
-                        <TextBox x:Name="IdpPathOnIIS" />
+                        <TextBox x:Name="IdpPathOnIIS" TabIndex="2" />
                     </StackPanel>
 
                     <StackPanel Orientation="Vertical">
                         <Label Content="IDP مسیر نصب سامانه" />
                         <StackPanel Orientation="Horizontal">
-                            <Button x:Name="btnIDPPath" Click="ChooseDirectory" Content="انتخاب مسیر" />
-                            <TextBox x:Name="IdpInstallationPath" Width="500"  />
+                            <Button x:Name="btnIDPPath" Click="ChooseDirectory" Content="انتخاب مسیر" TabIndex="3" />
+                            <TextBox x:Name="IdpInstallationPath" Width="500"  TabIndex="4" />
                         </StackPanel>
                     </StackPanel>
 
@@ -72,19 +85,19 @@
                     <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
                         <StackPanel Margin="5" Orientation="Vertical">
                             <Label Content="(ادمین) IIS در IDP نام برنامه مدیریت سامانه" />
-                            <TextBox x:Name="IISAdminManagementName" />
+                            <TextBox x:Name="IISAdminManagementName" TabIndex="5" />
                         </StackPanel>
                         <StackPanel Margin="5" Orientation="Vertical">
                             <Label Content="IDP آدرس سرور سامانه" />
-                            <TextBox x:Name="IdpServerPath" />
+                            <TextBox x:Name="IdpServerPath" TabIndex="6" />
                         </StackPanel>
                     </StackPanel>
 
                     <StackPanel Orientation="Vertical">
                         <Label Content="(ادمین) IDP مسیر نصب برنامه مدیریت سامانه" />
                         <StackPanel Orientation="Horizontal">
-                            <Button x:Name="btnIDPAdminPath" Click="ChooseIdpManagementInstallationPathDirectory" Content="انتخاب مسیر" />
-                            <TextBox x:Name="IdpManagementInstallationPath" Width="500" />
+                            <Button x:Name="btnIDPAdminPath" Click="ChooseIdpManagementInstallationPathDirectory" Content="انتخاب مسیر" TabIndex="7" />
+                            <TextBox x:Name="IdpManagementInstallationPath" Width="500" TabIndex="8" />
                         </StackPanel>
                     </StackPanel>
 
@@ -95,10 +108,12 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal">
 
             <mui:ModernButton
+                TabIndex="9"
                 Click="GotoNextPage"
                 Content="مرحله بعدی"
                 IconData="F1 M 57,42L 57,34L 32.25,34L 42.25,24L 31.75,24L 17.75,38L 31.75,52L 42.25,52L 32.25,42L 57,42 Z" />
             <mui:ModernButton
+                TabIndex="10"
                 Click="GoToPrevPage"
                 Content="مرحله قبلی"
                 IconData="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z" />

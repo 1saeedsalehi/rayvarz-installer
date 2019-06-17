@@ -1,7 +1,9 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Microsoft.Web.Administration;
 using Newtonsoft.Json;
 using RayvarzInstaller.ModernUI.App.Models;
 using RayvarzInstaller.ModernUI.App.Services;
@@ -27,13 +29,25 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         {
             
             InitializeComponent();
-            GetPackeInformation();
-            ObservableCollection<InstallPathInfo> custdata = GetData();
 
+            GetPackeInformation();
+            var installPathInfos = GetData();
+            setPreviousInstallationVersionsGrid(installPathInfos);
             //Bind the DataGrid to the customer data
-            foreach (var item in custdata)
+           
+        }
+
+        private void setPreviousInstallationVersionsGrid(ObservableCollection<InstallPathInfo> installPathInfos) {
+            if (installPathInfos.Count > 0)
             {
-                DG1.Items.Add(item);
+                foreach (var info in installPathInfos)
+                {
+                    DG1.Items.Add(info);
+                }
+            }
+            else {
+                DG1.Visibility = Visibility.Hidden;
+                DGTitle.Visibility = Visibility.Hidden;
             }
         }
 
@@ -127,7 +141,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         private IDPSetup IDPSetupMapper(InstallPathInfo installPathInfo) {
             
             var idpSetup = new IDPSetup();
-
+            idpSetup.DomainName = installPathInfo.Meta["DomainName"];
             idpSetup.IDPPath = installPathInfo.Meta["IDPPath"];
             idpSetup.IDPFolderName = installPathInfo.Meta["IDPFolderName"];
             idpSetup.AdminFolderName = installPathInfo.Meta["AdminFolderName"];

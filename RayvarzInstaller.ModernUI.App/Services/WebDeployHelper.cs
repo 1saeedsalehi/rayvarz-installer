@@ -274,21 +274,40 @@ namespace RayvarzInstaller.ModernUI.App.Services
             bool flag = false;
             try
             {
-                using (ServerManager mgr = new ServerManager())
+                using (DirectoryEntry directoryEntry = new DirectoryEntry("IIS://127.0.0.1/W3SVC/1/Root/"))
                 {
+                    directoryEntry.RefreshCache();
+                    //DirectoryEntry entry = new DirectoryEntry("IIS://127.0.0.1/W3SVC/1/Root/" + path);
 
-                    Application app = mgr.Sites["Default Web Site"].Applications['/'+path];
-                    mgr.Sites["Default Web Site"].Applications.Remove(app);
+                    var childDirectoryEntry  = directoryEntry.Children.Find(path, directoryEntry.SchemaClassName);
                     
-
-                    mgr.CommitChanges();
+                    directoryEntry.Children.Remove(childDirectoryEntry);
+                    directoryEntry.CommitChanges();
+                    flag = true;
                 }
-
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
             }
             return flag;
+            //bool flag = false;
+            //try
+            //{
+            //    using (ServerManager mgr = new ServerManager())
+            //    {
+
+            //        Application app = mgr.Sites["Default Web Site"].Applications['/'+path];
+            //        mgr.Sites["Default Web Site"].Applications.Remove(app);
+
+
+            //        mgr.CommitChanges();
+            //    }
+
+            //}
+            //catch (Exception ex)
+            //{
+            //}
+            //return flag;
         }
 
         public void StartIis()
@@ -331,6 +350,30 @@ namespace RayvarzInstaller.ModernUI.App.Services
         {
             try
             {
+
+
+                //bool result = false;
+
+                //DirectoryEntry site = null;
+                //try
+                //{
+                //    site = new DirectoryEntry("IIS://127.0.0.1/W3SVC");
+                //    foreach (DirectoryEntry entry in site.Children)
+                //    {
+                //        if (entry.Properties["ServerComment"].Value != null &&
+                //            entry.Properties["ServerComment"].Value.ToString() == virtualDirectoryName)
+                //            return true;
+                //    }
+                //    return false;
+                //}
+                //finally
+                //{
+                //    site.Dispose();
+                //}
+
+               
+
+
                 using (DirectoryEntry directoryEntry = new DirectoryEntry("IIS://127.0.0.1/W3SVC/1/Root/" + virtualDirectoryName))
                 {
                     if (directoryEntry.SchemaClassName.ToLower().StartsWith("iisweb"))
@@ -407,7 +450,100 @@ namespace RayvarzInstaller.ModernUI.App.Services
             }
             return string.Empty;
         }
-       
+
+        public bool CreateVirtualDirectoryV2
+            (string domainName , string appName, string path)
+        {
+            using (ServerManager mgr = new ServerManager())
+            {
+                try
+                {
+
+                    mgr.Sites[domainName].Applications.Add("/" + appName, path);
+                    mgr.Sites[domainName].Applications["/"+appName].ApplicationPoolName = appName;
+                    mgr.CommitChanges();
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    return false;
+                }
+            }
+        }
+
+        public bool CreateDotNetCoreAppPool(string iisName) {
+
+            try
+            {
+                using (ServerManager serverManager = new ServerManager())
+                {
+                    ApplicationPool newPool = serverManager.ApplicationPools.Add(iisName);
+                    newPool.ManagedRuntimeVersion = "";
+                    serverManager.CommitChanges();
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+        }
+
+        public void DeleteApplicationPoolForDotnetCore(string iisName)
+        {
+            using (ServerManager serverManager = new ServerManager())
+            {
+                ApplicationPool appPool = serverManager.ApplicationPools[iisName];
+                serverManager.ApplicationPools.Remove(appPool);
+                serverManager.CommitChanges();
+            }
+        }
+
+        public bool DeleteVirtualDirectoryV2
+            (string domainName, string appName)
+        {
+            try
+            {
+                using (ServerManager mgr = new ServerManager())
+                {
+
+                    Application app = mgr.Sites[domainName].Applications["/" + appName];
+                    mgr.Sites[domainName].Applications.Remove(app);
+                    mgr.CommitChanges();
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public bool ExistVirtualDirectoryV2
+            (string domainName, string appName, string path)
+        {
+            try
+            {
+                using (ServerManager mgr = new ServerManager())
+                {
+
+                    Application app = mgr.Sites[domainName].Applications["/" + appName];
+                    if (app != null)
+                    {
+                        return true;
+                    }
+                    else {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
         public Models.VirtualDirectory CreateVirtualDirectory
             (string name, string installationPath, string applicationPool, bool keepAppPoolAsIs = false)
         {

@@ -4,6 +4,7 @@ using RayvarzInstaller.ModernUI.App.Services;
 using RayvarzInstaller.ModernUI.Windows;
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -32,32 +33,27 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             setupServices.onStateChanged += SetupServices_onStateChanged;
             setupServices.OnComleted += SetupServices_OnComleted;
             SetProgressbarTitle(OperationState.Operation);
-            Thread longRunningThread = new Thread(new ThreadStart(delegate ()
+
+            Task.Run(() =>
             {
-                Thread.Sleep(1000);
-                Application.Current.Dispatcher.BeginInvoke((ThreadStart)delegate ()
-               {
-                   if (OperationState.Operation == Operation.Add)
-                   {
-                       setupServices.Install(OperationState.Data);
+                if (OperationState.Operation == Operation.Add)
+                {
+                    setupServices.Install(OperationState.Data);
 
-                       //setupServices.Install(OperationState.Data).ConfigureAwait(false);
-                   }
+                    //setupServices.Install(OperationState.Data).ConfigureAwait(false);
+                }
 
-                   if (OperationState.Operation == Operation.Modified)
-                   {
-                       //setupServices.Update(OperationState.Data).ConfigureAwait(false);
-                       setupServices.Update(OperationState.Data, OperationState.Id);
-                   }
-                   if (OperationState.Operation == Operation.Delete)
-                   {
-                       //setupServices.Update(OperationState.Data).ConfigureAwait(false);
-                       setupServices.Delete(OperationState.Data, OperationState.Id);
-                   }
-               });
-            }));
-            longRunningThread.Start();
-            
+                if (OperationState.Operation == Operation.Modified)
+                {
+                    //setupServices.Update(OperationState.Data).ConfigureAwait(false);
+                    setupServices.Update(OperationState.Data, OperationState.Id);
+                }
+                if (OperationState.Operation == Operation.Delete)
+                {
+                    //setupServices.Update(OperationState.Data).ConfigureAwait(false);
+                    setupServices.Delete(OperationState.Data, OperationState.Id);
+                }
+            });
         }
 
         private void SetProgressbarTitle(Operation operation)
@@ -80,17 +76,23 @@ namespace RayvarzInstaller.ModernUI.App.Pages
 
         private void SetupServices_OnComleted(string message)
         {
-            FinishButton.Visibility = Visibility.Visible;
-            idpProgressbar.Visibility = Visibility.Hidden;
-            progressbarTitle.Visibility = Visibility.Hidden;
-            progressbarStatus.Text = message;
+            Application.Current.Dispatcher.BeginInvoke((ThreadStart)delegate ()
+            {
+                FinishButton.Visibility = Visibility.Visible;
+                idpProgressbar.Visibility = Visibility.Hidden;
+                progressbarTitle.Visibility = Visibility.Hidden;
+                progressbarDetail.Visibility = Visibility.Hidden;
+                progressbarStatus.Visibility = Visibility.Visible;
+
+                progressbarStatus.Text = message;
+            });
         }
 
         private void SetupServices_onStateChanged(string message)
         {
             Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate ()
             {
-                idpProgressbar.Value += 0.15; // Do all the ui thread updates here
+                   progressbarDetail.Text = message; // Do all the ui thread updates here
             }));
 
         }

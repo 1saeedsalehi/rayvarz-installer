@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 using Microsoft.Web.Administration;
@@ -23,6 +26,25 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             InitializeComponent();
             FillFileAddress();
         }
+
+
+        private void FillDomainsCombo(string selectedItem)
+        {
+            List<String> domains;
+            using (ServerManager mgr = new ServerManager())
+            {
+                 domains = mgr.Sites.Select(c => c.Name).ToList();
+            }
+            foreach (var domain in domains)
+            {
+                if (!string.IsNullOrEmpty(selectedItem) && domain == selectedItem)
+                {
+                    DomainList.Items.Add(new ComboBoxItem { Content = domain, IsSelected = true });
+                }
+                DomainList.Items.Add(new ComboBoxItem { Content = domain });
+            }
+        }
+
 
         private void ChooseIdpManagementInstallationPathDirectory(object sender, System.Windows.RoutedEventArgs e)
         {
@@ -68,6 +90,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             {
                 ManipulateForm();
                 DisableControl();
+                FillDomainsCombo(OperationState.Data.DomainName);
             }
 
             if (OperationState.Operation == Operation.Add)
@@ -75,6 +98,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
                 ResetForm();
                 FillFileAddress();
                 EnableControl();
+                FillDomainsCombo(null);
             }
         }
 
@@ -120,7 +144,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             }
             else
             {
-
+                OperationState.Data.DomainName = DomainList.SelectionBoxItem.ToString();
                 OperationState.Data.IDPFolderName = IdpPathOnIIS.Text.ToLower();
                 OperationState.Data.IDPPath = IdpInstallationPath.Text;
                 OperationState.Data.AdminFolderName = IISAdminManagementName.Text.ToLower();
@@ -185,6 +209,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         }
         private void DisableControl()
         {
+            DomainList.IsEnabled = false;
             IdpPathOnIIS.IsEnabled = false;
             IdpInstallationPath.IsEnabled = false;
             IISAdminManagementName.IsEnabled = false;
@@ -194,6 +219,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         }
         private void EnableControl()
         {
+            DomainList.IsEnabled = true;
             IdpPathOnIIS.IsEnabled = true;
             IdpInstallationPath.IsEnabled = true;
             IISAdminManagementName.IsEnabled = true;
@@ -212,6 +238,12 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         private ErrorMessages ValidateForm()
         {
             var errorMessages = new ErrorMessages();
+
+            if (DomainList.SelectedItem == null)
+            {
+                errorMessages.Errors.Add("نام دامین حتما باید انتخاب شود !");
+            }
+
             if (string.IsNullOrEmpty(IdpPathOnIIS.Text))
             {
                 errorMessages.Errors.Add("نام فولدر سامانه IDP خالی است");

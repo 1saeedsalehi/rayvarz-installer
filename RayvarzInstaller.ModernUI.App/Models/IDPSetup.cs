@@ -2,6 +2,7 @@
 {
     public class IDPSetup
     {
+        public string DomainName { get; set; }
         public string IDPFolderName { get; set; }
         public string IDPPath { get; set; }
 

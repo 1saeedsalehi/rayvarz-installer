@@ -20,6 +20,7 @@ namespace RayvarzInstaller.ModernUI.App.Services
 
             var idpSetup = new IDPSetup
             {
+                DomainName = result["DomainName"].Value,
                 IDPFolderName = result["IDPSiteName"].Value,
                 IDPPath = result["IDPSitePath"].Value,
                 AdminPath = result["AdminSitePath"].Value,
@@ -29,15 +30,25 @@ namespace RayvarzInstaller.ModernUI.App.Services
                 Password = result["DbPassword"].Value,
                 Servername = result["DbServername"].Value,
                 Username = result["DbUsername"].Value,
-                CatalogName = result["DbCatalog"].Value,
+                CatalogName = result["DbCatalogName"].Value,
 
             };
-
+            setupServices.onStateChanged += SetupServices_onStateChanged;
+            setupServices.OnComleted += SetupServices_OnComleted;
             if (InstallParamaetersValidation(idpSetup))
             {
                 try
                 {
-                    setupServices.Install(idpSetup);
+                    Console.WriteLine("Installation Start");
+                    try
+                    {
+                        setupServices.Install(idpSetup);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        Console.WriteLine(ex.Message + " / " + ex.StackTrace);
+                    }
                     return await Task.FromResult(true);
                 }
                 catch (Exception ex)
@@ -49,9 +60,24 @@ namespace RayvarzInstaller.ModernUI.App.Services
             return await Task.FromResult(false);
         }
 
+        private void SetupServices_OnComleted(string message)
+        {
+            Console.WriteLine(message);
+        }
+
+        private void SetupServices_onStateChanged(string message)
+        {
+            Console.WriteLine(message);
+        }
+
         public bool InstallParamaetersValidation(IDPSetup iDPSetup)
         {
             var result = true;
+            if (string.IsNullOrEmpty(iDPSetup.DomainName))
+            {
+                result = false;
+                Console.Error.WriteLine("DomainName is require !!!");
+            }
             if (string.IsNullOrEmpty(iDPSetup.IDPAddress))
             {
                 result = false;
@@ -102,7 +128,7 @@ namespace RayvarzInstaller.ModernUI.App.Services
             if (Directory.Exists(GetRealFileAddress(iDPSetup.IDPPath, iDPSetup.IDPFolderName)))
             {
                 result = false;
-                Console.Error.WriteLine("IDPFolderName folder already exists !!!");
+                Console.WriteLine("IDPFolderName folder already exists !!!");
             }
 
             if (Directory.Exists(GetRealFileAddress(iDPSetup.AdminPath, iDPSetup.AdminFolderName)))

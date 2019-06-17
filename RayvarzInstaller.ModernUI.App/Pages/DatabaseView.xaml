@@ -64,6 +64,7 @@
                     <StackPanel Orientation="Vertical">
                         <Label Content="نام کاتالوگ" />
                         <ComboBox
+                            TabIndex="1"
                             FlowDirection="RightToLeft"
                             x:Name="CatalogList"
                             Width="305"
@@ -74,25 +75,25 @@
 
                     <StackPanel Margin="5" Orientation="Vertical">
                         <Label Content="آدرس سرور پایگاه داده" />
-                        <TextBox x:Name="DbServer" />
+                        <TextBox x:Name="DbServer" TabIndex="2" />
                     </StackPanel>
 
                     <StackPanel Margin="5" Orientation="Vertical">
                         <Label Content="نام کاربری" />
-                        <TextBox x:Name="DbUSerName" />
+                        <TextBox x:Name="DbUSerName" TabIndex="3" />
                     </StackPanel>
 
                     <StackPanel Margin="5" Orientation="Vertical">
                         <Label Content="گذرواژه" />
-                        <PasswordBox x:Name="DbPassword" />
+                        <PasswordBox x:Name="DbPassword" TabIndex="4" />
                     </StackPanel>
 
 
                     <StackPanel Margin="5" Orientation="Vertical">
                         <Label Content="نام پایگاه داده" />
-                        <TextBox x:Name="DbName" />
+                        <TextBox x:Name="DbName" TabIndex="5" />
                     </StackPanel>
-                    <Button Margin="5" Click="CheckDb_Clicked" Content="بررسی اتصال به پایگاه داده" />
+                    <Button TabIndex="6" Margin="5" Click="CheckDb_Clicked" Content="بررسی اتصال به پایگاه داده" />
 
                 </StackPanel>
             </StackPanel>
@@ -100,10 +101,12 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal">
 
             <mui:ModernButton
+                TabIndex="7"
                 Click="GotoNextPage"
                 Content="مرحله بعدی"
                 IconData="F1 M 57,42L 57,34L 32.25,34L 42.25,24L 31.75,24L 17.75,38L 31.75,52L 42.25,52L 32.25,42L 57,42 Z" />
             <mui:ModernButton
+                TabIndex="8"
                 Click="GoToPrevPage"
                 Content="مرحله قبلی"
                 IconData="F1 M 19.0002,34L 19.0002,42L 43.7502,42L 33.7502,52L 44.2502,52L 58.2502,38L 44.2502,24L 33.7502,24L 43.7502,34L 19.0002,34 Z" />
