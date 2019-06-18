@@ -52,9 +52,22 @@ namespace RayvarzInstaller.ModernUI.App.Services
             get
             {
                 if (!this._installPaths.ContainsKey(key))
-                    return (InstallPathInfo)null;
-                return this._installPaths[key];
+                    return null;
+                return _installPaths[key];
             }
+        }
+
+        public InstallPathInfo GetInstallPathByIISName(string iisName)
+        {
+            foreach (var item in _installPaths)
+            {
+                if (item.Value.IISName == iisName)
+                {
+                    return item.Value;
+                }
+            }
+
+            return null;
         }
 
         private void CreateDefaultDirectory()

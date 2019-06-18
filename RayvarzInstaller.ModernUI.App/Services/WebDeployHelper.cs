@@ -521,7 +521,7 @@ namespace RayvarzInstaller.ModernUI.App.Services
         }
 
         public bool ExistVirtualDirectoryV2
-            (string domainName, string appName, string path)
+            (string domainName, string appName)
         {
             try
             {

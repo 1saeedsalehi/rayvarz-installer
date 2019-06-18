@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.CommandLineUtils;
-using RayvarzInstaller.ModernUI.App.Models;
 using RayvarzInstaller.ModernUI.App.Services;
 using RayvarzInstaller.ModernUI.Presentation;
 using System;
@@ -35,17 +34,22 @@ namespace RayvarzInstaller.ModernUI.App
 
             if (!e.Args.Any())
             {
-                RunAsAdministrator();
+                //RunAsAdministrator();
                 var mainWindow = new MainWindow();
                 mainWindow.Show();
             }
             else
             {
                 AttachConsole(-1);
-
-                InitCli(e.Args);
-
-                Console.WriteLine("Stop !!!!!");
+                if (!IsRunningAsAdministrator())
+                {
+                    Console.WriteLine("Please running command prompt as administrator !!!");
+                    FreeConsole();
+                }
+                else
+                {
+                    InitCli(e.Args);
+                }
 
                 //CLI
                 //AttachConsole(-1);
@@ -81,11 +85,11 @@ namespace RayvarzInstaller.ModernUI.App
                 CommandOption packageIdCommand = command.Option("--package", "Setup Package Id", CommandOptionType.SingleValue);
                 CommandOption jsonConfigFileCommand = command.Option("--jsonConfigFile", "Full Path to json config file", CommandOptionType.SingleValue);
                 CommandOption jsonConfigBase64Command = command.Option("--jsonConfigBase64", "Base64 encoded content of json config file", CommandOptionType.SingleValue);
-                command.OnExecute((Func<int>)(() =>
+                command.OnExecute(() =>
                 {
                     if (!packageIdCommand.HasValue() && (!jsonConfigFileCommand.HasValue() && !jsonConfigBase64Command.HasValue()))
                     {
-                        command.ShowHelp((string)null);
+                        command.ShowHelp(null);
                         return -1;
                     }
                     var manifest = packageResolver.GetPackage();
@@ -106,76 +110,80 @@ namespace RayvarzInstaller.ModernUI.App
                         return 1;
                     }
                     return -1;
-                }));
+                });
             }, true);
             commandLineApplication.Command("uninstall-package", (Action<CommandLineApplication>)(command =>
             {
-                command.Description = "example: uninstall-package --id 00000000-0000-0000-0000-000000000000";
-                CommandOption installPathId = command.Option("--id", "Install path id", CommandOptionType.SingleValue);
-                command.OnExecute((Func<int>)(() =>
-                {
-                    Guid result;
-                    if (!installPathId.HasValue() || !Guid.TryParse(installPathId.Value(), out result))
-                    {
-                        command.ShowHelp((string)null);
-                        return 1;
-                    }
-                    InstallPathInfo pathInfo = registery.InstallPaths.SingleOrDefault<InstallPathInfo>((Func<InstallPathInfo, bool>)(ip => ip.Id == new Guid(installPathId.Value())));
-                    if (registery == null)
-                    {
-                        Console.WriteLine(string.Format("\r\n'{0}' not found", (object)result));
-                        return 1;
-                    }
-                    // todo
-                    return 0;
-                }));
-            }), true);
-            commandLineApplication.Command("update-package", (Action<CommandLineApplication>)(command =>
-            {
-                command.Description = "example: update-package --id 00000000-0000-0000-0000-000000000000 --updatePackageId BPMS_9603.0.2.0 --jsonConfigFile ./config.json [--jsonConfigBase64 base64Value]";
+                CommandOption packageIdCommand = command.Option("--package", "Setup Package Id", CommandOptionType.SingleValue);
                 CommandOption jsonConfigFileCommand = command.Option("--jsonConfigFile", "Full Path to json config file", CommandOptionType.SingleValue);
                 CommandOption jsonConfigBase64Command = command.Option("--jsonConfigBase64", "Base64 encoded content of json config file", CommandOptionType.SingleValue);
-                CommandOption installPathId = command.Option("--id", "Install path id", CommandOptionType.SingleValue);
-                CommandOption updatePackageId = command.Option("--updatePackageId", "Setup Update Package Id", CommandOptionType.SingleValue);
-                command.OnExecute((Func<int>)(() =>
+                command.OnExecute(() =>
                 {
-                    Guid result;
-                    if (!installPathId.HasValue() || !updatePackageId.HasValue() || !Guid.TryParse(installPathId.Value(), out result) || !jsonConfigFileCommand.HasValue() && !jsonConfigBase64Command.HasValue())
+                    if (!packageIdCommand.HasValue() && (!jsonConfigFileCommand.HasValue() && !jsonConfigBase64Command.HasValue()))
                     {
                         command.ShowHelp((string)null);
-                        return 1;
+                        return -1;
                     }
-                    InstallPathInfo installPathInfo = registery.InstallPaths.SingleOrDefault<InstallPathInfo>((Func<InstallPathInfo, bool>)(ip => ip.Id == new Guid(installPathId.Value())));
-                    if (registery == null)
-                    {
-                        Console.WriteLine(string.Format("\r\n'{0}' not found", (object)result));
-                        return 1;
-                    }
-                    Manifest manifest = packageResolver.GetPackage();
-                     
-              
+
                     string jsonConfig = string.Empty;
                     if (jsonConfigFileCommand.HasValue())
                         jsonConfig = File.ReadAllText(jsonConfigFileCommand.Value());
                     else if (jsonConfigBase64Command.HasValue())
                         jsonConfig = Encoding.UTF8.GetString(Convert.FromBase64String(jsonConfigBase64Command.Value()));
+                    var installationResult = cliService.CommandLineDelete(jsonConfig).Result;
+                    if (installationResult)
+                    {
+                        return 1;
+                    }
+                    return -1;
 
-                    //abstractSetupPackage.Service.CommandLineInstall(jsonConfig).Wait();
-
-                    return 0;
-                }));
+                });
             }), true);
+            commandLineApplication.Command("update-package", command =>
+            {
+
+                CommandOption packageIdCommand = command.Option("--package", "Setup Package Id", CommandOptionType.SingleValue);
+                CommandOption jsonConfigFileCommand = command.Option("--jsonConfigFile", "Full Path to json config file", CommandOptionType.SingleValue);
+                CommandOption jsonConfigBase64Command = command.Option("--jsonConfigBase64", "Base64 encoded content of json config file", CommandOptionType.SingleValue);
+                command.OnExecute(() =>
+                {
+                    if (!packageIdCommand.HasValue() && (!jsonConfigFileCommand.HasValue() && !jsonConfigBase64Command.HasValue()))
+                    {
+                        command.ShowHelp(null);
+                        return -1;
+                    }
+                    //InstallPathInfo installPathInfo = registery.InstallPaths.SingleOrDefault<InstallPathInfo>((Func<InstallPathInfo, bool>)(ip => ip.Id == new Guid(installPathId.Value())));
+                    //if (registery == null)
+                    //{
+                    //    Console.WriteLine(string.Format("\r\n'{0}' not found", (object)result));
+                    //    return 1;
+                    //}
+                    //Manifest manifest = packageResolver.GetPackage();
+
+
+                    string jsonConfig = string.Empty;
+                    if (jsonConfigFileCommand.HasValue())
+                        jsonConfig = File.ReadAllText(jsonConfigFileCommand.Value());
+                    else if (jsonConfigBase64Command.HasValue())
+                        jsonConfig = Encoding.UTF8.GetString(Convert.FromBase64String(jsonConfigBase64Command.Value()));
+                    var installationResult = cliService.CommandLineUpdate(jsonConfig).Result;
+                    if (installationResult)
+                    {
+                        return 1;
+                    }
+                    return -1;
+                });
+            }, true);
             try
             {
                 commandLineApplication.Execute(args);
             }
             catch (CommandParsingException ex)
             {
-                commandLineApplication.ShowHelp((string)null);
+                commandLineApplication.ShowHelp(null);
             }
             finally
             {
-                Console.WriteLine("end !!!!!");
                 FreeConsole();
                 //SendKeys.SendWait("{ENTER}");
             }
@@ -189,13 +197,19 @@ namespace RayvarzInstaller.ModernUI.App
 
                 // Using operating shell and setting the ProcessStartInfo.Verb to “runas” will let it run as admin
                 processStartInfo.UseShellExecute = true;
+                processStartInfo.CreateNoWindow = true;
+               // processStartInfo.RedirectStandardOutput = true;
                 processStartInfo.Verb = "runas";
-
+                processStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                //processStartInfo.CreateNoWindow = true;
                 // Start the application as new process
-                Process.Start(processStartInfo);
 
+                
+                Process.Start(processStartInfo);
+                Current.Shutdown();
+                
                 // Shut down the current (old) process
-                System.Windows.Forms.Application.Exit();
+
             }
 
         }

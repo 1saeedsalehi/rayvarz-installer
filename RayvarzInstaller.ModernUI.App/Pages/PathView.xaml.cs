@@ -31,6 +31,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         private void FillDomainsCombo(string selectedItem)
         {
             List<String> domains;
+            DomainList.Items.Clear();
             using (ServerManager mgr = new ServerManager())
             {
                  domains = mgr.Sites.Select(c => c.Name).ToList();
@@ -273,14 +274,17 @@ namespace RayvarzInstaller.ModernUI.App.Pages
                 errorMessages.Errors.Add("نام برنامه مدیریت سامانه نمی تواند با نام اصلی برنامه یکی باشد");
             }
 
-            if (webDeployHelper.VirtualDirectoryExists(IdpPathOnIIS.Text))
+            if (DomainList.SelectionBoxItem != null)
             {
-                errorMessages.Errors.Add("برنامه ای با نام سامانه IDP در IIS وجود دارد.");
-            }
+                if (webDeployHelper.ExistVirtualDirectoryV2(DomainList.SelectionBoxItem.ToString(), IdpPathOnIIS.Text))
+                {
+                    errorMessages.Errors.Add("برنامه ای با نام سامانه IDP در IIS وجود دارد.");
+                }
 
-            if (webDeployHelper.VirtualDirectoryExists(IISAdminManagementName.Text))
-            {
-                errorMessages.Errors.Add("برنامه ای با نام برنامه مدیریت سامانه IDP در IIS وجود دارد.");
+                if (webDeployHelper.ExistVirtualDirectoryV2(DomainList.SelectionBoxItem.ToString(), IISAdminManagementName.Text))
+                {
+                    errorMessages.Errors.Add("برنامه ای با نام برنامه مدیریت سامانه IDP در IIS وجود دارد.");
+                }
             }
 
             if (Directory.Exists(GetRealFileAddress(IdpInstallationPath.Text, IdpPathOnIIS.Text)))

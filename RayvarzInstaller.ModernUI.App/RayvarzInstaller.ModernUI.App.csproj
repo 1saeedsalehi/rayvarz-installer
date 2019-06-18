@@ -41,6 +41,10 @@
   <PropertyGroup>
     <StartupObject>RayvarzInstaller.ModernUI.App.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="ChinhDo.Transactions.FileManager, Version=1.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ChinhDo.Transactions.FileManager.1.2.0\lib\net45\ChinhDo.Transactions.FileManager.dll</HintPath>
@@ -236,6 +240,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Models\CommandEnum.cs" />
     <Compile Include="Models\ErrorMessages.cs" />
     <Compile Include="Models\Exceptions\DuplicatePackageException.cs" />
     <Compile Include="Models\IDPSetup.cs" />
@@ -298,6 +303,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

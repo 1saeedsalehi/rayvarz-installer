@@ -38,7 +38,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             {
                 if (OperationState.Operation == Operation.Add)
                 {
-                    setupServices.Install(OperationState.Data);
+                    setupServices.Install(OperationState.Data , CommandTypeEnum.Gui);
 
                     //setupServices.Install(OperationState.Data).ConfigureAwait(false);
                 }
@@ -46,12 +46,12 @@ namespace RayvarzInstaller.ModernUI.App.Pages
                 if (OperationState.Operation == Operation.Modified)
                 {
                     //setupServices.Update(OperationState.Data).ConfigureAwait(false);
-                    setupServices.Update(OperationState.Data, OperationState.Id);
+                    setupServices.Update(OperationState.Data, OperationState.Id , CommandTypeEnum.Gui);
                 }
                 if (OperationState.Operation == Operation.Delete)
                 {
                     //setupServices.Update(OperationState.Data).ConfigureAwait(false);
-                    setupServices.Delete(OperationState.Data, OperationState.Id);
+                    setupServices.Delete(OperationState.Data, OperationState.Id , CommandTypeEnum.Gui);
                 }
             });
         }

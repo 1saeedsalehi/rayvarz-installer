@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 
 namespace RayvarzInstaller.ModernUI.App.Models
@@ -14,9 +10,6 @@ namespace RayvarzInstaller.ModernUI.App.Models
         private string _version;
         private string _packageId;
         private Image _logo;
-
-        public RayvarzSystem RayvarzSystem { get; set; }
-
         public string PackageId
         {
             get
@@ -41,10 +34,6 @@ namespace RayvarzInstaller.ModernUI.App.Models
             }
         }
 
-        public List<string> DependencyPackages { get; set; }
-
-        public List<string> CompatiblePackages { get; set; }
-
         public Image Logo
         {
             get
@@ -65,37 +54,13 @@ namespace RayvarzInstaller.ModernUI.App.Models
             }
         }
 
-        public string PackageName
-        {
-            get
-            {
-                switch (this.RayvarzSystem)
-                {
-                    case RayvarzSystem.BPMS:
-                        return "سامانه مدیریت فرآیند مدیریت کسب و کار";
-                    case RayvarzSystem.EOA:
-                        return "اتوماسیون اداری";
-                    case RayvarzSystem.SSO:
-                        return "لاگین یکپارچه رایورز";
-                    default:
-                        return (string)null;
-                }
-            }
-        }
-
         public string Path { get; set; }
 
         public bool IsChecked { get; set; }
 
         public Manifest()
         {
-            this.DependencyPackages = new List<string>();
-            this.CompatiblePackages = new List<string>();
-        }
 
-        public bool IsCompatibleTo(Manifest manifest)
-        {
-            return this.CompatiblePackages.Any<string>((Func<string, bool>)(m => manifest.PackageId == m)) && manifest.CompatiblePackages.Any<string>((Func<string, bool>)(m => m == this.PackageId));
         }
     }
 }

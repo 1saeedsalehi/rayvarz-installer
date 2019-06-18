@@ -20,7 +20,6 @@ namespace RayvarzInstaller.ModernUI.App.Services
         public event OnCancelDelegate OnCanceled;
         public event OnErrorDelegate OnError;
         public event OnCompletedDelegate OnComleted;
-        private Manifest _manifest;
 
         //public event OnSubStateChangedDelegtae OnSubStateChanged;
 
@@ -35,27 +34,41 @@ namespace RayvarzInstaller.ModernUI.App.Services
             this.setupRegistry = setupRegistry;
             this.packageResolver = packageResolver;
         }
-        public void Update(IDPSetup setupConfig, Guid packageId)
+        public void Update(IDPSetup setupConfig, Guid packageId , CommandTypeEnum commandType)
         {
             var realFileAddress = GetRealFileAddress(setupConfig.IDPPath, setupConfig.IDPFolderName);
             var realAdminAddress = GetRealFileAddress(setupConfig.AdminPath, setupConfig.AdminFolderName);
 
             //DeleteVirtualDirectories(realFileAddress, realAdminAddress);
             DeleteFiles(realFileAddress, realAdminAddress);
-
-            onStateChanged?.Invoke(" بروزرسانی تنظیمات مربوط به AppSettings");
+            if (commandType == CommandTypeEnum.Gui)
+                onStateChanged?.Invoke(" بروزرسانی تنظیمات مربوط به AppSettings");
+            else
+                onStateChanged?.Invoke("Appsetting configuration...");
+            
             PopulateJsonConfiguration(setupConfig.CatalogName);
             PopulateAdminJsonConfiguration(setupConfig.CatalogName, setupConfig.IDPFolderName, setupConfig.IDPAddress);
-            onStateChanged?.Invoke("بروزرسانی فایل ها");
+            if (commandType == CommandTypeEnum.Gui)
+                onStateChanged?.Invoke("بروزرسانی فایل ها");
+            else
+                onStateChanged?.Invoke("Update files...");
             CopyFile(realFileAddress);
             CopyAdminFile(realAdminAddress);
-
-            onStateChanged?.Invoke("بروزرسانی تنظیمات پنل ادمین");
+            if (commandType == CommandTypeEnum.Gui)
+                onStateChanged?.Invoke("بروزرسانی تنظیمات پنل ادمین");
+            else
+                onStateChanged?.Invoke("Update admin panel configuration...");
+            
             // populate html
             PopulateHtmlIndex(realAdminAddress, setupConfig.AdminFolderName);
 
             //Set Settings
-            onStateChanged?.Invoke("بروزرسانی تنظیمات دیتابیس");
+            if (commandType == CommandTypeEnum.Gui)
+                onStateChanged?.Invoke("بروزرسانی تنظیمات دیتابیس");
+            else
+                onStateChanged?.Invoke("Update databse configuration...");
+
+            
             //var fileAddress = GetRealFileAddress(_userControl.txtFileAddress.Text, _userControl.txtIISName.Text);
             SetSiteConnection(
                 realFileAddress,
@@ -74,23 +87,40 @@ namespace RayvarzInstaller.ModernUI.App.Services
                 setupConfig.Username,
                 setupConfig.CatalogName
                 );
-
-            onStateChanged?.Invoke(" بروزرسانی تنظیمات در رجیستری");
+            InstallPathInfo installPathInfo = null;
+            if (commandType == CommandTypeEnum.Gui)
+                onStateChanged?.Invoke(" بروزرسانی تنظیمات در رجیستری");
+            else
+                onStateChanged?.Invoke("Update registry configuration...");
             var manifest = packageResolver.GetPackage();
-            var installationPath = setupRegistry[packageId];
-            setupRegistry.Remove(manifest, installationPath);
-            SaveSetupRegistry(setupConfig, manifest);
-            onStateChanged?.Invoke("پایان");
+            if (packageId != Guid.Empty)
+            {
+                installPathInfo = setupRegistry[packageId];
+           }
+            else {
+                installPathInfo = setupRegistry.GetInstallPathByIISName(setupConfig.IDPFolderName);
+            }
+            if (installPathInfo != null)
+            {
+                setupRegistry.Remove(manifest, installPathInfo);
+                SaveSetupRegistry(setupConfig, manifest);
+            }
+            if (commandType == CommandTypeEnum.Gui)
+                OnComleted("خدا را شکر عملیات بروزرسانی نسخه مورد نظر با موفقیت پایان پذیرفت  ");
+            else
+                onStateChanged?.Invoke("Goodluck...");
 
-            OnComleted("خدا را شکر عملیات بروزرسانی نسخه مورد نظر با موفقیت پایان پذیرفت  ");
-
+           
         }
 
-        public void Delete(IDPSetup setupConfig, Guid packageId)
+        public void Delete(IDPSetup setupConfig, Guid packageId , CommandTypeEnum commandType)
         {
             var realFileAddress = GetRealFileAddress(setupConfig.IDPPath, setupConfig.IDPFolderName);
             var realAdminAddress = GetRealFileAddress(setupConfig.AdminPath, setupConfig.AdminFolderName);
-            onStateChanged?.Invoke("حذف دایرکتوری ها");
+            if (commandType == CommandTypeEnum.Gui)
+                onStateChanged?.Invoke("حذف دایرکتوری ها");
+            else
+                onStateChanged?.Invoke("Remove directories...");
             StopIIS();
 
 
@@ -98,29 +128,51 @@ namespace RayvarzInstaller.ModernUI.App.Services
             DeleteVirtualDirectoriesV2(setupConfig.AdminFolderName, setupConfig.DomainName);
             DeleteApplicationPools(setupConfig.IDPFolderName, setupConfig.AdminFolderName);
 
-            
-            
-            onStateChanged?.Invoke("حذف فایل ها");
-            DeleteFiles(realFileAddress, realAdminAddress);
-            onStateChanged?.Invoke(" ذخیره تنظیمات در رجیستری");
-            var manifest = packageResolver.GetPackage();
-            var installationPath = setupRegistry[packageId];
-            setupRegistry.Remove(manifest, installationPath);
-            setupRegistry.Commit();
-            StartIIS();
-            OnComleted("پایان");
-            OnComleted("عملیات حذف نسخه مورد نظر با موفقیت پایان پذیرفت");
 
+            if (commandType == CommandTypeEnum.Gui)
+                onStateChanged?.Invoke("حذف فایل ها");
+            else
+                onStateChanged?.Invoke("Remove files...");
+          
+            DeleteFiles(realFileAddress, realAdminAddress);
+            if (commandType == CommandTypeEnum.Gui)
+                onStateChanged?.Invoke(" ذخیره تنظیمات در رجیستری");
+            else
+                onStateChanged?.Invoke("Registry configuration...");
+            var manifest = packageResolver.GetPackage();
+            InstallPathInfo installPathInfo = null;
+            if (packageId != Guid.Empty)
+            {
+                installPathInfo = setupRegistry[packageId];
+            }
+            else {
+                installPathInfo = setupRegistry.GetInstallPathByIISName(setupConfig.IDPFolderName);
+            }
+
+            if (installPathInfo != null)
+            {
+                setupRegistry.Remove(manifest, installPathInfo);
+                setupRegistry.Commit();
+            }
+
+            StartIIS();
+            if (commandType == CommandTypeEnum.Gui)
+                OnComleted("عملیات حذف نسخه مورد نظر با موفقیت پایان پذیرفت");
+            else
+                onStateChanged?.Invoke("Goodluck...");
         }
 
-        public void Install(IDPSetup setupConfig)
+        public void Install(IDPSetup setupConfig, CommandTypeEnum commandType)
         {
             var manifest = packageResolver.GetPackage();
 
             var realFileAddress = GetRealFileAddress(setupConfig.IDPPath, setupConfig.IDPFolderName);
             var realAdminAddress = GetRealFileAddress(setupConfig.AdminPath, setupConfig.AdminFolderName);
 
-            onStateChanged?.Invoke(" ذخیره تنظیمات مربوط به AppSettings");
+            if (commandType == CommandTypeEnum.Gui)
+                onStateChanged?.Invoke(" ذخیره تنظیمات مربوط به AppSettings");
+            else
+                onStateChanged?.Invoke("Appsetting proccessing.");
 
             PopulateJsonConfiguration(setupConfig.CatalogName);
             PopulateAdminJsonConfiguration(setupConfig.CatalogName, setupConfig.IDPFolderName, setupConfig.IDPAddress);
@@ -131,17 +183,27 @@ namespace RayvarzInstaller.ModernUI.App.Services
             //CheckDotNetCoreInstalled();//InstallApplications();
 
             // copying files
-            onStateChanged?.Invoke("کپی فایل ها");
+            if (commandType == CommandTypeEnum.Gui)
+                onStateChanged?.Invoke("کپی فایل ها");
+            else
+                onStateChanged?.Invoke("Copy files...");
+
             CopyFile(realFileAddress);
             CopyAdminFile(realAdminAddress);
 
             // populate html
-            onStateChanged?.Invoke("ثبت تنظیمات پنل ادمین");
+            if (commandType == CommandTypeEnum.Gui)
+                onStateChanged?.Invoke("ثبت تنظیمات پنل ادمین");
+            else
+                onStateChanged?.Invoke("Admin configuration...");
             PopulateHtmlIndex(realAdminAddress, setupConfig.AdminFolderName);
 
 
             //Set Settings
-            onStateChanged?.Invoke("ایجاد تنظیمات دیتابیس");
+            if (commandType == CommandTypeEnum.Gui)
+                onStateChanged?.Invoke("ایجاد تنظیمات دیتابیس");
+            else
+                onStateChanged?.Invoke("Databse configuration...");
             //var fileAddress = GetRealFileAddress(_userControl.txtFileAddress.Text, _userControl.txtIISName.Text);
             SetSiteConnection(
                 realFileAddress,
@@ -161,26 +223,31 @@ namespace RayvarzInstaller.ModernUI.App.Services
                 setupConfig.CatalogName
                 );
 
-            
-            StopIIS();
 
-            onStateChanged?.Invoke("ساخت دایرکتوری ها");
+            StopIIS();
+            if (commandType == CommandTypeEnum.Gui)
+                onStateChanged?.Invoke("ساخت دایرکتوری ها");
+            else
+                onStateChanged?.Invoke("Virtualdirectory configuration");
             // create application pool and app in iis
             var virtualDir = MakeVirtualDirectoryV2(setupConfig.DomainName, setupConfig.IDPFolderName, realFileAddress);
             // MakeWebSite(setupConfig.AdminFolderName, realAdminAddress, setupConfig.AdminPort);
             var adminVirtualDir = MakeVirtualDirectoryV2(setupConfig.DomainName, setupConfig.AdminFolderName, realAdminAddress);
 
-            onStateChanged?.Invoke(" ذخیره تنظیمات در رجیستری");
+            if (commandType == CommandTypeEnum.Gui)
+                onStateChanged?.Invoke(" ذخیره تنظیمات در رجیستری");
+            else
+                onStateChanged?.Invoke("Registry configuration");
 
             SaveSetupRegistry(setupConfig, manifest);
             //SaveAdminSetupRegistry(setupConfig.AdminFolderName, setupConfig.AdminPath, realAdminAddress);
 
             StartIIS();
 
-            OnComleted("پایان");
-
-            OnComleted("خدا را شکر عملیات نصب نسخه مورد نظر با موفقیت پایان پذیرفت  ");
-
+            if (commandType == CommandTypeEnum.Gui)
+                OnComleted("خدا را شکر عملیات نصب نسخه مورد نظر با موفقیت پایان پذیرفت  ");
+            else
+                OnComleted("Goodluck!");
             //await Task.FromResult(true);
         }
 
@@ -309,13 +376,13 @@ namespace RayvarzInstaller.ModernUI.App.Services
             return virtualDir;
         }
 
-        private bool MakeVirtualDirectoryV2(string domainName,string iisName, string realFileAddress)
+        private bool MakeVirtualDirectoryV2(string domainName, string iisName, string realFileAddress)
         {
             webDeployHelper.CreateDotNetCoreAppPool(iisName);
             //_container.LogHelper.Info("Start making app pool and website in IIS.");
-            var result = webDeployHelper.CreateVirtualDirectoryV2(domainName , iisName , realFileAddress);
+            var result = webDeployHelper.CreateVirtualDirectoryV2(domainName, iisName, realFileAddress);
             SetPermissions(realFileAddress);
-            
+
             return result;
         }
 
@@ -325,7 +392,7 @@ namespace RayvarzInstaller.ModernUI.App.Services
             webDeployHelper.DeleteApplicationPoolForDotnetCore(realAdminAddress);
         }
 
-        
+
 
         public void SetPermissions(string address)
         {
