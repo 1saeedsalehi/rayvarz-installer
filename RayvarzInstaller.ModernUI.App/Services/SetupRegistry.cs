@@ -10,7 +10,7 @@ namespace RayvarzInstaller.ModernUI.App.Services
     public class SetupRegistry : ISetupRegistry
     {
         private readonly string DefaultRegistryPath = string.Format("{0}\\Rayvarz\\Registry\\", (object)Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles));
-        private const string DefaultRegistryFileName = "registry.json";
+        private const string DefaultRegistryFileName = "idp_registry.json";
         private string _registryPath;
         private Dictionary<Guid, InstallPathInfo> _installPaths;
 
@@ -33,7 +33,7 @@ namespace RayvarzInstaller.ModernUI.App.Services
         //[DefaultConstructor]
         public SetupRegistry()
         {
-            this._registryPath = string.Format("{0}{1}", (object)this.DefaultRegistryPath, (object)"registry.json");
+            this._registryPath = string.Format("{0}{1}", (object)this.DefaultRegistryPath, (object)DefaultRegistryFileName);
             this._installPaths = new Dictionary<Guid, InstallPathInfo>();
             this.CreateDefaultDirectory();
             this.LoadRegistry();

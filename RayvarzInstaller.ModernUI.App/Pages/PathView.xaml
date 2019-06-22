@@ -69,7 +69,7 @@
 
 
                     <StackPanel Orientation="Vertical">
-                        <Label Content="IIS در IDP نام پوشه سامانه" />
+                        <Label Content="IIS در IDP نام سامانه" />
                         <TextBox x:Name="IdpPathOnIIS" TabIndex="2" />
                     </StackPanel>
 

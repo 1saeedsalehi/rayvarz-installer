@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
@@ -25,6 +26,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         {
             InitializeComponent();
             FillFileAddress();
+            FillFileName();
         }
 
 
@@ -98,6 +100,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             {
                 ResetForm();
                 FillFileAddress();
+                FillFileName();
                 EnableControl();
                 FillDomainsCombo(null);
             }
@@ -200,6 +203,15 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             IdpServerPath.Text = "http://localhost";
         }
 
+        private void FillFileName()
+        {
+
+            IdpPathOnIIS.Text = "rayvarzsso";
+            IISAdminManagementName.Text = "rayvarzssoadmin";
+            
+        }
+
+
         private void ManipulateForm()
         {
             IdpPathOnIIS.Text = OperationState.Data.IDPFolderName;
@@ -254,9 +266,22 @@ namespace RayvarzInstaller.ModernUI.App.Pages
                 errorMessages.Errors.Add("مسیر نصب سامانه IDP خالی است");
             }
 
+
+            var regexItem = new Regex("^[a-zA-Z0-9 ]*$");
+            if (!regexItem.IsMatch(IdpPathOnIIS.Text))
+            {
+                errorMessages.Errors.Add(" امکان درج کاراکترهای خاص در نام سامانه نمی باشد .");
+            }
+
+
             if (string.IsNullOrEmpty(IISAdminManagementName.Text))
             {
                 errorMessages.Errors.Add("نام برنامه مدیریت سامانه IDP خالی است");
+            }
+
+            if (!regexItem.IsMatch(IISAdminManagementName.Text))
+            {
+                errorMessages.Errors.Add("امکان درج کاراکترهای خاص در نام سامانه مدیریت نمی باشد .");
             }
 
             if (string.IsNullOrEmpty(IdpManagementInstallationPath.Text))
@@ -274,7 +299,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
                 errorMessages.Errors.Add("نام برنامه مدیریت سامانه نمی تواند با نام اصلی برنامه یکی باشد");
             }
 
-            if (DomainList.SelectionBoxItem != null)
+            if (!string.IsNullOrEmpty(DomainList.SelectionBoxItem?.ToString()))
             {
                 if (webDeployHelper.ExistVirtualDirectoryV2(DomainList.SelectionBoxItem.ToString(), IdpPathOnIIS.Text))
                 {
@@ -287,14 +312,28 @@ namespace RayvarzInstaller.ModernUI.App.Pages
                 }
             }
 
-            if (Directory.Exists(GetRealFileAddress(IdpInstallationPath.Text, IdpPathOnIIS.Text)))
+
+            string idpPath = Path.GetPathRoot(IdpInstallationPath.Text);   
+            if (!Directory.Exists(idpPath))
+            {
+                errorMessages.Errors.Add("مسیر نصب وارد شده برای نصب سامانه IDP موجود نمی باشد");
+            }
+
+            string adminPath = Path.GetPathRoot(IdpManagementInstallationPath.Text);
+            if (!Directory.Exists(adminPath))
+            {
+                errorMessages.Errors.Add("مسیر نصب وارد شده برای نصب سامانه مدیریت IDP موجود نمی باشد");
+            }
+
+
+            if (!string.IsNullOrEmpty(IdpPathOnIIS.Text) && Directory.Exists(GetRealFileAddress(IdpInstallationPath.Text, IdpPathOnIIS.Text)))
             {
                 errorMessages.Errors.Add("پوشه ای با این نام در مسیر تعیین شده برای نصب سامانه IDP موجود است");
             }
 
-            if (Directory.Exists(GetRealFileAddress(IdpManagementInstallationPath.Text, IISAdminManagementName.Text)))
+            if (!string.IsNullOrEmpty(IISAdminManagementName.Text) && Directory.Exists(GetRealFileAddress(IdpManagementInstallationPath.Text, IISAdminManagementName.Text)))
             {
-                errorMessages.Errors.Add("پوشه ای با این نام در مسیر تعیین شده برای نصب سامانه IDP موجود است");
+                errorMessages.Errors.Add("پوشه ای با این نام در مسیر تعیین شده برای نصب مدیریت IDP موجود است");
             }
 
             return errorMessages;

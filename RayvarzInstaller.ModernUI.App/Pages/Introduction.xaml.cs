@@ -33,6 +33,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             GetPackeInformation();
             var installPathInfos = GetData();
             setPreviousInstallationVersionsGrid(installPathInfos);
+            
             //Bind the DataGrid to the customer data
            
         }

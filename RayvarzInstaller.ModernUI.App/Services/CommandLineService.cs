@@ -147,16 +147,21 @@ namespace RayvarzInstaller.ModernUI.App.Services
             var result = true;
             result = ParamaetersValidation(iDPSetup);
 
-            if (webDeployHelper.ExistVirtualDirectoryV2(iDPSetup.DomainName , iDPSetup.IDPFolderName))
+            if (!string.IsNullOrEmpty(iDPSetup.DomainName))
             {
-                result = false;
-                Console.Error.WriteLine("IDPFolderName directory already exists !!!");
-            }
 
-            if (webDeployHelper.ExistVirtualDirectoryV2(iDPSetup.DomainName, iDPSetup.AdminFolderName))
-            {
-                result = false;
-                Console.Error.WriteLine("AdminFolderName directory already exists !!!");
+                if (webDeployHelper.ExistVirtualDirectoryV2(iDPSetup.DomainName, iDPSetup.IDPFolderName))
+                {
+                    result = false;
+                    Console.Error.WriteLine("IDPFolderName directory already exists !!!");
+                }
+
+                if (webDeployHelper.ExistVirtualDirectoryV2(iDPSetup.DomainName, iDPSetup.AdminFolderName))
+                {
+                    result = false;
+                    Console.Error.WriteLine("AdminFolderName directory already exists !!!");
+                }
+
             }
 
             if (Directory.Exists(GetRealFileAddress(iDPSetup.IDPPath, iDPSetup.IDPFolderName)))
