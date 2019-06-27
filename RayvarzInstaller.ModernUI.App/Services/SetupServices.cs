@@ -106,7 +106,7 @@ namespace RayvarzInstaller.ModernUI.App.Services
                 SaveSetupRegistry(setupConfig, manifest);
             }
             if (commandType == CommandTypeEnum.Gui)
-                OnComleted("خدا را شکر عملیات بروزرسانی نسخه مورد نظر با موفقیت پایان پذیرفت  ");
+                OnComleted("عملیات بروزرسانی نسخه مورد نظر با موفقیت پایان پذیرفت");
             else
                 onStateChanged?.Invoke("Goodluck...");
 
@@ -245,7 +245,7 @@ namespace RayvarzInstaller.ModernUI.App.Services
             StartIIS();
 
             if (commandType == CommandTypeEnum.Gui)
-                OnComleted("خدا را شکر عملیات نصب نسخه مورد نظر با موفقیت پایان پذیرفت  ");
+                OnComleted(" عملیات نصب نسخه مورد نظر با موفقیت پایان پذیرفت");
             else
                 OnComleted("Goodluck!");
             //await Task.FromResult(true);

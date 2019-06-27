@@ -100,7 +100,13 @@ namespace RayvarzInstaller.ModernUI.App.Pages
 
         private void GoToPrevPage(object sender, System.Windows.RoutedEventArgs e)
         {
-            NavigationCommands.GoToPage.Execute("/Pages/PathView.xaml", null);
+            OperationState.Data.DatabaseName = DbName.Text;
+            OperationState.Data.Username = DbUSerName.Text;
+            OperationState.Data.Password = DbPassword.Password;
+            OperationState.Data.Servername = DbServer.Text;
+            OperationState.Data.CatalogName = "EOFFICE"; //CatalogList.SelectionBoxItem.ToString();
+            var dataTransfer = JsonConvert.SerializeObject(OperationState);
+            NavigationCommands.GoToPage.Execute("/Pages/PathView.xaml#" + dataTransfer, null);
         }
 
         private void CheckDb_Clicked(object sender, RoutedEventArgs e)
@@ -127,6 +133,13 @@ namespace RayvarzInstaller.ModernUI.App.Pages
                 DbUSerName.Text = OperationState.Data.Username;
                 DbServer.Text = OperationState.Data.Servername;
             }
+            else {
+                DbName.Text = "";
+                DbUSerName.Text = "";
+                DbServer.Text = "";
+                DbPassword.Password = "";
+            }
+
             FillCatalog(OperationState.Data.CatalogName);
 
         }

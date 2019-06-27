@@ -58,9 +58,11 @@
                     <StackPanel Orientation="Vertical">
                         <Label Content="نام دامین" />
                         <ComboBox
+                            SelectionChanged="DomainList_SelectionChanged"
                             TabIndex="1"
                             FlowDirection="RightToLeft"
                             x:Name="DomainList"
+                            
                             Width="305"
                             Height="25" >
 

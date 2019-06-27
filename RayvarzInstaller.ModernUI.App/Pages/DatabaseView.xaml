@@ -27,7 +27,7 @@
                 <mui:BBCodeBlock
                     Margin="0,0,0,16"
                     HorizontalAlignment="Right"
-                    BBCode="در این مرحله از  پیکربندی پایگاه داده را مشخص کنید" />
+                    BBCode="در این مرحله پیکربندی پایگاه داده را مشخص کنید" />
 
                 <StackPanel x:Name="Form" Orientation="Vertical">
 

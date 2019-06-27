@@ -25,7 +25,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         public PathView()
         {
             InitializeComponent();
-            FillFileAddress();
+            //FillFileAddress();
             FillFileName();
         }
 
@@ -36,15 +36,36 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             DomainList.Items.Clear();
             using (ServerManager mgr = new ServerManager())
             {
-                 domains = mgr.Sites.Select(c => c.Name).ToList();
+                domains = mgr.Sites.Select(c => c.Name).ToList();
             }
-            foreach (var domain in domains)
+            //foreach (var domain in domains)
+            //{
+            //    if (!string.IsNullOrEmpty(selectedItem) && domain == selectedItem)
+            //    {
+            //        DomainList.Items.Add(new ComboBoxItem { Content = domain, IsSelected = true });
+            //    }
+            //    DomainList.Items.Add(new ComboBoxItem { Content = domain });
+            //}
+            for (int i = 0; i < domains.Count; i++)
             {
+                var domain = domains[i];
                 if (!string.IsNullOrEmpty(selectedItem) && domain == selectedItem)
                 {
                     DomainList.Items.Add(new ComboBoxItem { Content = domain, IsSelected = true });
                 }
-                DomainList.Items.Add(new ComboBoxItem { Content = domain });
+                else
+                {
+                    if (string.IsNullOrEmpty(selectedItem) && i == 0)
+                    {
+                        DomainList.Items.Add(new ComboBoxItem { Content = domain, IsSelected = true });
+                    }
+                    else
+                    {
+                        DomainList.Items.Add(new ComboBoxItem { Content = domain });
+                    }
+                }
+              
+                
             }
         }
 
@@ -52,7 +73,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         private void ChooseIdpManagementInstallationPathDirectory(object sender, System.Windows.RoutedEventArgs e)
         {
             var fbd = new FolderBrowserDialog();
-            fbd.Description = "IDP مسیر نصب سامانه";
+            fbd.Description = "(ادمین) IDP مسیر نصب مدیریت سامانه";
             fbd.ShowNewFolderButton = true;
             var browseDilogResult = fbd.ShowDialog();
 
@@ -65,7 +86,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
         private void ChooseDirectory(object sender, System.Windows.RoutedEventArgs e)
         {
             var fbd = new FolderBrowserDialog();
-            fbd.Description = "(ادمین) IDP مسیر نصب برنامه مدیریت سامانه";
+            fbd.Description = "IDP مسیر نصب برنامه ";
             fbd.ShowNewFolderButton = true;
             var browseDilogResult = fbd.ShowDialog();
 
@@ -98,11 +119,15 @@ namespace RayvarzInstaller.ModernUI.App.Pages
 
             if (OperationState.Operation == Operation.Add)
             {
-                ResetForm();
-                FillFileAddress();
-                FillFileName();
+                if (string.IsNullOrEmpty(OperationState.Data.DomainName))
+                {
+                    ResetForm();
+                    FillFileName();
+                    FillDomainsCombo(null);
+                }
+
                 EnableControl();
-                FillDomainsCombo(null);
+                //FillFileAddress(DomainList.SelectionBoxItem.ToString());
             }
         }
 
@@ -136,7 +161,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             {
                 GotoNextPageModifiedMode();
             }
-            
+
         }
 
         private void GotoNextPageAddMode()
@@ -161,7 +186,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
 
         private void GotoNextPageModifiedMode()
         {
-            
+
             if (string.IsNullOrEmpty(IdpServerPath.Text))
             {
                 ModernDialog.ShowMessage("آدرس سرور سامانه IDP خالی می باشد", "", MessageBoxButton.OK);
@@ -174,7 +199,8 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             }
         }
 
-        private void NavigateToNextPage() {
+        private void NavigateToNextPage()
+        {
             var transferData = JsonConvert.SerializeObject(OperationState);
             NavigationCommands.GoToPage.Execute("/Pages/DatabaseView.xaml#" + transferData, null);
         }
@@ -184,20 +210,21 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             NavigationCommands.GoToPage.Execute("/Pages/Introduction.xaml", null);
         }
 
-        private void FillFileAddress()
+        private void FillFileAddress(string sitename)
         {
-            string fileAddress = "";
-            try
-            {
-                ServerManager sm = new ServerManager();
-                Site site = sm.Sites[0];
+            var fileAddress = GetPhysicalPath(sitename);
+            //string fileAddress = "";
+            //try
+            //{
+            //    ServerManager sm = new ServerManager();
+            //    Site site = sm.Sites[0];
 
-                fileAddress = site.LogFile.Directory.Replace("%SystemDrive%\\", Path.GetPathRoot(Environment.SystemDirectory)).Replace("logs\\LogFiles", "wwwroot\\");
-            }
-            catch
-            {
+            //    fileAddress = site.LogFile.Directory.Replace("%SystemDrive%\\", Path.GetPathRoot(Environment.SystemDirectory)).Replace("logs\\LogFiles", "wwwroot\\");
+            //}
+            //catch
+            //{
 
-            }
+            //}
             IdpInstallationPath.Text = !(string.IsNullOrEmpty(fileAddress)) ? fileAddress : "C:\\inetpub\\wwwroot\\";
             IdpManagementInstallationPath.Text = !(string.IsNullOrEmpty(fileAddress)) ? fileAddress : "C:\\inetpub\\wwwroot\\";
             IdpServerPath.Text = "http://localhost";
@@ -208,7 +235,7 @@ namespace RayvarzInstaller.ModernUI.App.Pages
 
             IdpPathOnIIS.Text = "rayvarzsso";
             IISAdminManagementName.Text = "rayvarzssoadmin";
-            
+
         }
 
 
@@ -259,21 +286,52 @@ namespace RayvarzInstaller.ModernUI.App.Pages
 
             if (string.IsNullOrEmpty(IdpPathOnIIS.Text))
             {
-                errorMessages.Errors.Add("نام فولدر سامانه IDP خالی است");
+                errorMessages.Errors.Add("نام سامانه IDP خالی است");
             }
+
+            if (IdpPathOnIIS.Text.Length > 64)
+            {
+                errorMessages.Errors.Add("نام سامانه IDP نمی تواند بیشتر از 64 کاراکتر باشد");
+            }
+
+
             if (string.IsNullOrEmpty(IdpInstallationPath.Text))
             {
                 errorMessages.Errors.Add("مسیر نصب سامانه IDP خالی است");
             }
+            else
+            {
+
+                if (Path.IsPathRooted(IdpInstallationPath.Text))
+                {
+                    string idpPath = Path.GetPathRoot(IdpInstallationPath.Text);
+                    if (!Directory.Exists(idpPath))
+                    {
+                        errorMessages.Errors.Add("مسیر نصب وارد شده برای نصب سامانه IDP موجود نمی باشد");
+                    }
+                }
+                else
+                {
+                    errorMessages.Errors.Add("مسیر نصب وارد شده برای نصب سامانه IDP معتبر نمی باشد");
+                }
+            }
 
 
-            var regexItem = new Regex("^[a-zA-Z0-9 ]*$");
+            var regexItem = new Regex("^[-a-zA-Z0-9_]*$");
             if (!regexItem.IsMatch(IdpPathOnIIS.Text))
             {
                 errorMessages.Errors.Add(" امکان درج کاراکترهای خاص در نام سامانه نمی باشد .");
             }
+            else {
+                if (!string.IsNullOrEmpty(DomainList.SelectionBoxItem?.ToString()))
+                {
+                    if (webDeployHelper.ExistVirtualDirectoryV2(DomainList.SelectionBoxItem.ToString(), IdpPathOnIIS.Text))
+                    {
+                        errorMessages.Errors.Add("برنامه ای با نام سامانه IDP در IIS وجود دارد.");
+                    }
+                }
 
-
+            }
             if (string.IsNullOrEmpty(IISAdminManagementName.Text))
             {
                 errorMessages.Errors.Add("نام برنامه مدیریت سامانه IDP خالی است");
@@ -283,10 +341,43 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             {
                 errorMessages.Errors.Add("امکان درج کاراکترهای خاص در نام سامانه مدیریت نمی باشد .");
             }
+            else
+            {
+                if (!string.IsNullOrEmpty(DomainList.SelectionBoxItem?.ToString()))
+                {
+                    if (webDeployHelper.ExistVirtualDirectoryV2(DomainList.SelectionBoxItem.ToString(), IISAdminManagementName.Text))
+                    {
+                        errorMessages.Errors.Add("برنامه ای با نام برنامه مدیریت سامانه IDP در IIS وجود دارد.");
+                    }
+                }
+
+            }
+
+            if (IISAdminManagementName.Text.Length > 64)
+            {
+                errorMessages.Errors.Add("نام سامانه مدیریت IDP نمی تواند بیشتر از 64 کاراکتر باشد");
+            }
+
 
             if (string.IsNullOrEmpty(IdpManagementInstallationPath.Text))
             {
                 errorMessages.Errors.Add("مسیر نصب برنامه مدیریت سامانه IDP خالی است");
+            }
+            else
+            {
+
+                if (Path.IsPathRooted(IdpManagementInstallationPath.Text))
+                {
+                    string adminPath = Path.GetPathRoot(IdpManagementInstallationPath.Text);
+                    if (!Directory.Exists(adminPath))
+                    {
+                        errorMessages.Errors.Add("مسیر نصب وارد شده برای نصب سامانه مدیریت IDP موجود نمی باشد");
+                    }
+                }
+                else
+                {
+                    errorMessages.Errors.Add("مسیر نصب وارد شده برای نصب سامانه مدیریت IDP معتبر نمی باشد");
+                }
             }
 
             if (string.IsNullOrEmpty(IdpServerPath.Text))
@@ -299,31 +390,9 @@ namespace RayvarzInstaller.ModernUI.App.Pages
                 errorMessages.Errors.Add("نام برنامه مدیریت سامانه نمی تواند با نام اصلی برنامه یکی باشد");
             }
 
-            if (!string.IsNullOrEmpty(DomainList.SelectionBoxItem?.ToString()))
-            {
-                if (webDeployHelper.ExistVirtualDirectoryV2(DomainList.SelectionBoxItem.ToString(), IdpPathOnIIS.Text))
-                {
-                    errorMessages.Errors.Add("برنامه ای با نام سامانه IDP در IIS وجود دارد.");
-                }
-
-                if (webDeployHelper.ExistVirtualDirectoryV2(DomainList.SelectionBoxItem.ToString(), IISAdminManagementName.Text))
-                {
-                    errorMessages.Errors.Add("برنامه ای با نام برنامه مدیریت سامانه IDP در IIS وجود دارد.");
-                }
-            }
+           
 
 
-            string idpPath = Path.GetPathRoot(IdpInstallationPath.Text);   
-            if (!Directory.Exists(idpPath))
-            {
-                errorMessages.Errors.Add("مسیر نصب وارد شده برای نصب سامانه IDP موجود نمی باشد");
-            }
-
-            string adminPath = Path.GetPathRoot(IdpManagementInstallationPath.Text);
-            if (!Directory.Exists(adminPath))
-            {
-                errorMessages.Errors.Add("مسیر نصب وارد شده برای نصب سامانه مدیریت IDP موجود نمی باشد");
-            }
 
 
             if (!string.IsNullOrEmpty(IdpPathOnIIS.Text) && Directory.Exists(GetRealFileAddress(IdpInstallationPath.Text, IdpPathOnIIS.Text)))
@@ -345,5 +414,28 @@ namespace RayvarzInstaller.ModernUI.App.Pages
             return string.Format("{0}\\{1}", path, name);
         }
 
+        private void DomainList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var items = e.AddedItems;
+            if (items.Count > 0)
+            {
+                string siteName = (items[0] as ComboBoxItem).Content as string;
+                FillFileAddress(siteName);
+            }
+        }
+
+        private string GetPhysicalPath(string siteName)
+        {
+            var fileAddress = "";
+            ServerManager sm = new ServerManager();
+
+            fileAddress = sm.Sites[siteName].Applications["/"].VirtualDirectories["/"].PhysicalPath;
+            if (fileAddress.Contains("%SystemDrive%"))
+            {
+                fileAddress = sm.Sites[siteName].LogFile.Directory.Replace("%SystemDrive%\\", Path.GetPathRoot(Environment.SystemDirectory)).Replace("logs\\LogFiles", "wwwroot\\");
+            }
+
+            return fileAddress;
+        }
     }
 }
